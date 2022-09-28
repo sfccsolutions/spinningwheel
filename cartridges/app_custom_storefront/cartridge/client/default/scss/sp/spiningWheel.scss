@@ -1,3 +1,12 @@
+.btns {
+    display: flex;
+    margin-top: 40%;
+}
+
+.tableSet {
+    margin-top: 2%;
+}
+
 #shareBtn {
     float: right;
     margin-top: 1%;
@@ -16,13 +25,13 @@
 }
 
 .btn1 {
-    margin-left: 26% !important;
     margin: 3%;
+    margin-left: 26% !important;
 }
 
 .btn2 {
-    margin-left: 8% !important;
     margin: 3%;
+    margin-left: 8% !important;
 }
 
 text {
@@ -34,31 +43,26 @@ text {
 
 #chart {
     position: relative;
-    width: 500px;
+    // width: 500px;
     // height: 500px;
-    top: 0;
-    left: 25px;
+    top: 15px;
+    left: 45px;
 }
 
 #question {
-    position: absolute;
-    width: 400px;
-    height: 500px;
     top: 0;
-    left: 520px;
-    margin: 8%;
 }
 
 #question h1 {
     font-size: 30px;
-    font-weight: bold;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     position: absolute;
     padding: 0;
     margin: 0;
-    top: 50%;
+    top: 38%;
     -webkit-transform: translate(0, -50%);
     transform: translate(0, -50%);
+    text-align: center;
 }
 
 .checkAddtoCart {
@@ -86,9 +90,4 @@ table thead {
 a {
     cursor: pointer;
     margin: 10px;
-}
-
-.btns {
-    margin-top: 85%;
-    margin-left: -8%;
 }
