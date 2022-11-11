@@ -3,6 +3,6 @@
 var processInclude = require('./util');
 
 $(document).ready(function () {
-    alert("raffafa");
+    // alert("raffafa");
     processInclude(require('./product/quickView'));
 });

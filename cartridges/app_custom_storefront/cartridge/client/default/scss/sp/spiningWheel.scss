@@ -1,6 +1,10 @@
 .btns {
     display: flex;
-    margin-top: 40%;
+    // margin-top: 20%;
+}
+
+#description {
+    margin-top: 35px;
 }
 
 .tableSet {
@@ -36,7 +40,7 @@
 
 text {
     font-family: Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     pointer-events: none;
     color: white;
 }
@@ -59,7 +63,7 @@ text {
     position: absolute;
     padding: 0;
     margin: 0;
-    top: 38%;
+    top: 55%;
     -webkit-transform: translate(0, -50%);
     transform: translate(0, -50%);
     text-align: center;
@@ -90,4 +94,14 @@ table thead {
 a {
     cursor: pointer;
     margin: 10px;
+}
+
+.productImg {
+    margin-left: 25%;
+    margin-top: 10%;
+}
+
+#wheelImages {
+    width: 10%;
+    height: 10%;
 }

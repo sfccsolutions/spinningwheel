@@ -120,6 +120,9 @@
       "env"
     ]
   },
+  "paths": {
+    "base": "./cartridges/app_storefront_base"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint",

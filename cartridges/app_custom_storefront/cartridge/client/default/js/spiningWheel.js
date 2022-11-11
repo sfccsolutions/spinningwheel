@@ -1,3 +1,6 @@
+/* <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> */
+import * as $ from 'jquery'
+//import $ from 'jquery' ;
 var padding = { top: 20, right: 40, bottom: 0, left: 0 },
     w = 400 - padding.left - padding.right,
     h = 400 - padding.top - padding.bottom,
@@ -7,18 +10,8 @@ var padding = { top: 20, right: 40, bottom: 0, left: 0 },
     picked = 100000,
     oldpick = [],
     color = d3.scale.category20();//category20c()
-//randomNumbers = getRandomNumbers();
-//http://osric.com/bingo-card-generator/?title=HTML+and+CSS+BINGO!&words=padding%2Cfont-family%2Ccolor%2Cfont-weight%2Cfont-size%2Cbackground-color%2Cnesting%2Cbottom%2Csans-serif%2Cperiod%2Cpound+sign%2C%EF%B9%A4body%EF%B9%A5%2C%EF%B9%A4ul%EF%B9%A5%2C%EF%B9%A4h1%EF%B9%A5%2Cmargin%2C%3C++%3E%2C{+}%2C%EF%B9%A4p%EF%B9%A5%2C%EF%B9%A4!DOCTYPE+html%EF%B9%A5%2C%EF%B9%A4head%EF%B9%A5%2Ccolon%2C%EF%B9%A4style%EF%B9%A5%2C.html%2CHTML%2CCSS%2CJavaScript%2Cborder&freespace=true&freespaceValue=Web+Design+Master&freespaceRandom=false&width=5&height=5&number=35#results
-var data = [
-    { "label": "Dell LAPTOP", "value": 1, "question": "You Won Dell Laptop..Congratulations!" },
-    { "label": "IMAC PRO", "value": 2, "question": "You Won IMAC PRO..Congratulations!" },
-    { "label": "FREE VOUCHER", "value": 3, "question": "You Won Free Voucher..Congratulations!" },
-    { "label": "BONUS POINTS", "value": 4, "question": "You Won Bonus Points..Congratulations!" },
-    { "label": "FERRARI", "value": 5, "question": "You Won FERRARI..Congratulations!" },
-    { "label": "APARTMENT", "value": 6, "question": "You Won APARTMENT..Congratulations!" },
-    { "label": "FREE SHIPPING", "value": 7, "question": "You Won Free Shipping..Congratulations!" }, //nesting
-    { "label": "JEWELLERY", "value": 8, "question": "You Won pair of Earrings..Congratulations!" },
-];
+var dataValue = $('#mySpinerData').val();
+var data = JSON.parse(dataValue);
 var svg = d3.select('#chart')
     .append("svg")
     .data([data])
@@ -40,11 +33,13 @@ var arcs = vis.selectAll("g.slice")
     .data(pie)
     .enter()
     .append("g")
-    .attr("class", "slice");
+    .attr("class", "slice")
+    .attr("title", data[1].productName);
 
 arcs.append("path")
-    .attr("fill", function (d, i) { return color(i); })
-    .attr("d", function (d) { return arc(d); });
+    // .attr("fill", function (d, i) { return color(i); })
+    .attr("d", function (d) { return arc(d); })
+    .attr("title", data[1].productName);;
 // add the text
 arcs.append("text").attr("transform", function (d) {
     d.innerRadius = 0;
@@ -53,9 +48,25 @@ arcs.append("text").attr("transform", function (d) {
     return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 10) + ")";
 })
     .attr("text-anchor", "end")
-    .text(function (d, i) {
-        return data[i].label;
-    });
+// .text(function (d, i) {
+//     return data[i].productName;
+// })
+
+arcs.append("image").attr("transform", function (d) {
+    d.innerRadius = 0;
+    d.outerRadius = r;
+    d.angle = (d.startAngle + d.endAngle) / 2;
+    return "rotate(" + (d.angle * 180 / Math.PI - 100) + ")translate(" + (d.outerRadius - 70) + ")";
+})
+    .attr("href", function (d, i) {
+        return data[i].productImage;
+    })
+    .attr("id", "wheelImages")
+    .attr("title", "Images")
+    // .attr("href", data[2].productImage)
+    .attr("alt", "images");
+
+
 container.on("click", spin);
 function spin(d) {
 
@@ -88,30 +99,36 @@ function spin(d) {
         .each("end", function () {
             //mark question as seen
             d3.select(".slice:nth-child(" + (picked + 1) + ") path")
-                // .attr("fill", "#111")
+            // .attr("fill", "#111")
             //populate question
             d3.select("#question h1")
-                .text(data[picked].question);
+                .text(data[picked].productName)
+            document.getElementById('img').src = data[picked].productImage;
+            d3.select("#question p")
+                .text(data[picked].description)
+
             oldrotation = rotation;
 
             /* Get the result value from object "data" */
-            console.log(data[picked].value)
+            console.log(data[picked].productID)
 
             /* Comment the below line for restrict spin to sngle time */
             container.on("click", spin);
         });
 }
+
+
 //make arrow
 svg.append("g")
     .attr("transform", "translate(" + (w + padding.left + padding.right) + "," + ((h / 2) + padding.top) + ")")
     .append("path")
     .attr("d", "M-" + (r * .15) + ",0L0," + (r * .05) + "L0,-" + (r * .05) + "Z")
-    // .style({ "fill": "black" });
+// .style({ "fill": "black" });
 //draw spin circle
 container.append("circle")
     .attr("cx", 0)
     .attr("cy", 0)
-    .attr("r", 40)
+    .attr("r", 30)
     .style({ "fill": "white", "cursor": "pointer" });
 //spin text
 container.append("text")
@@ -119,7 +136,7 @@ container.append("text")
     .attr("y", 7)
     .attr("text-anchor", "middle")
     .text("SPIN")
-    .style({ "font-weight": "bold", "font-size": "20px" });
+    .style({ "font-weight": "bold", "font-size": "15px" });
 
 
 function rotTween(to) {

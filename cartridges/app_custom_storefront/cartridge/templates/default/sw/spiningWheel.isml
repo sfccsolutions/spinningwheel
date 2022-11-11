@@ -12,7 +12,8 @@
             <span class="fa fa-share-alt" id="shareIcon" aria-hidden="true"></span>
             Share
         </button>
-
+        <iscomment> ${pdict.spinerObj} </iscomment>
+        <input type="hidden" id="mySpinerData" value="${pdict.spinerObj}">
         <!-- Modal -->
         <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog">
@@ -41,12 +42,19 @@
         <div class="col-md-5 box1" id="chart"></div>
 
         <div class="col-md-7 box2" id="question">
-            <h1>We have different options by Spining the Wheel and win!!</h1>
+            <div>
+                <img id="img" src="" class="productImg" />
+                <h1>We have different options by Spining the Wheel and win!!</h1>
+                <p id="description"></p>
 
-            <div class="btns">
-                <button type="button" class="btn btn-info btn1">Accept</button>
-                <button type="button" class="btn btn-info btn2" data-dismiss="modal">Decline</button>
+                <div class="btns">
+                    <button type="button" class="btn btn-info btn1">Accept</button>
+                    <button type="button" class="btn btn-info btn2" data-dismiss="modal">Decline</button>
+                </div>
+
+
             </div>
+
         </div>
     </div>
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
