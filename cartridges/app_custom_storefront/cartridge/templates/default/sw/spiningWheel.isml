@@ -1,10 +1,4 @@
-<isdecorate template="common/layout/page">
-    <isscript>
-        var assets = require('*/cartridge/scripts/assets.js');
-        <iscomment> var assets = require('*/cartridge/scripts/assets.js'); </iscomment>
-        assets.addJs('/js/spiningWheel.js');
-        assets.addCss('/css/sp/spiningWheel.css')
-    </isscript>
+
 
     <div class="container">
         <!-- Trigger the modal with a button -->
@@ -137,4 +131,3 @@
             </tbody>
         </table>
     </div>
-</isdecorate>

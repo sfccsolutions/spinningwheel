@@ -1,4 +1,5 @@
 /* <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> */
+
 import * as $ from 'jquery'
 //import $ from 'jquery' ;
 var padding = { top: 20, right: 40, bottom: 0, left: 0 },
@@ -12,6 +13,8 @@ var padding = { top: 20, right: 40, bottom: 0, left: 0 },
     color = d3.scale.category20();//category20c()
 var dataValue = $('#mySpinerData').val();
 var data = JSON.parse(dataValue);
+console.log("******");
+console.log(data);
 var svg = d3.select('#chart')
     .append("svg")
     .data([data])
