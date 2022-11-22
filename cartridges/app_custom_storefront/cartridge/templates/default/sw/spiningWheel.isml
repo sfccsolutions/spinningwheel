@@ -1,5 +1,9 @@
-
-
+<isdecorate template="common/layout/page">
+    <isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addJs('/js/main1.js');
+        assets.addCss('/css/sp/spiningWheel.css')
+    </isscript>
     <div class="container">
         <!-- Trigger the modal with a button -->
         <button type="button" id="shareBtn" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
@@ -8,6 +12,9 @@
         </button>
         <iscomment> ${pdict.spinerObj} </iscomment>
         <input type="hidden" id="mySpinerData" value="${pdict.spinerObj}">
+        <input type="hidden" id="selectedProduct">
+        <input type="hidden" id="addProductUrl" value="${pdict.addProductUrl}">
+        <input type="hidden" id="getProductUrl" value="${pdict.getProductUrl}">
         <!-- Modal -->
         <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog">
@@ -42,8 +49,9 @@
                 <p id="description"></p>
 
                 <div class="btns">
-                    <button type="button" class="btn btn-info btn1">Accept</button>
-                    <button type="button" class="btn btn-info btn2" data-dismiss="modal">Decline</button>
+                    <button type="button" class="btn btn-info btn1" id="btn-accept">Accept</button>
+                    <button type="button" class="btn btn-info btn2" data-dismiss="modal"
+                        id="btn-decline">Decline</button>
                 </div>
 
 
@@ -131,3 +139,4 @@
             </tbody>
         </table>
     </div>
+</isdecorate>

@@ -7,7 +7,6 @@
 
 var server = require('server');
 server.extend(module.superModule);
-var cache = require('*/cartridge/scripts/middleware/cache');
 
 /**
  * Any customization on this endpoint, also requires update for Default-Start endpoint
@@ -24,14 +23,7 @@ var cache = require('*/cartridge/scripts/middleware/cache');
  * @param {serverfunction} - get
  */
 server.append('Show', function (req, res, next) {
-    var accountHelpers = require('*/cartridge/scripts/helpers/accountHelpers');
-    var spinObjArray = accountHelpers.getProductsForSpinningWheel();
-    var spinerObj = JSON.stringify(spinObjArray);
-
-    res.setViewData({
-            spinerObj: spinerObj
-
-        })
+    res.render('account/accountDashboard');
 
     next();
 });

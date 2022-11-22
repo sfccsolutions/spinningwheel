@@ -1,6 +1,8 @@
 /* <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> */
-
 import * as $ from 'jquery'
+$("#btn-accept").hide();
+$("#btn-decline").hide();
+
 //import $ from 'jquery' ;
 var padding = { top: 20, right: 40, bottom: 0, left: 0 },
     w = 400 - padding.left - padding.right,
@@ -13,8 +15,6 @@ var padding = { top: 20, right: 40, bottom: 0, left: 0 },
     color = d3.scale.category20();//category20c()
 var dataValue = $('#mySpinerData').val();
 var data = JSON.parse(dataValue);
-console.log("******");
-console.log(data);
 var svg = d3.select('#chart')
     .append("svg")
     .data([data])
@@ -72,6 +72,10 @@ arcs.append("image").attr("transform", function (d) {
 
 container.on("click", spin);
 function spin(d) {
+    
+    $("#btn-accept").show() ;
+    $("#btn-decline").show() ;
+   
 
     container.on("click", null);
     //all slices have been seen, all done
@@ -102,6 +106,8 @@ function spin(d) {
         .each("end", function () {
             //mark question as seen
             d3.select(".slice:nth-child(" + (picked + 1) + ") path")
+             $('#selectedProduct').val(JSON.stringify(data[picked]));
+
             // .attr("fill", "#111")
             //populate question
             d3.select("#question h1")
@@ -117,6 +123,7 @@ function spin(d) {
 
             /* Comment the below line for restrict spin to sngle time */
             container.on("click", spin);
+
         });
 }
 
