@@ -14,6 +14,7 @@ var URLUtils = require('dw/web/URLUtils');
 var ProductList = require('dw/customer/ProductList');
 // var UUIDUtils = require('dw/util/UUIDUtils');
 var Transaction = require('dw/system/Transaction');
+var userLoggedIn = require('*/cartridge/scripts/middleware/userLoggedIn'); 
 
 /**
  * Any customization on this endpoint, also requires update for Default-Start endpoint
@@ -29,17 +30,24 @@ var Transaction = require('dw/system/Transaction');
  * @param {renders} - isml
  * @param {serverfunction} - get
  */
-server.get('Show', function (req, res, next) {
+server.get('Show',userLoggedIn.validateLoggedIn,function (req, res, next) {
     var addProductUrl = dw.web.URLUtils.url('SpinningWheel-AddProduct');
     var getProductUrl = dw.web.URLUtils.url('SpinningWheel-GetProduct');
     var spinningWheelHelpers = require('*/cartridge/scripts/helpers/spinningWheelHelpers');
     var spinObjArray = spinningWheelHelpers.getProductsForSpinningWheel();
     var spinerObj = JSON.stringify(spinObjArray);
+    
+    var list = productListHelper.getCurrentOrNewList(req.currentCustomer.raw, { type: 100 });
+    var earned_items = productListHelper.getItem(list);
+    var temp = earned_items;
+   
 
     res.render('sw/spiningWheel', {
         spinerObj: spinerObj,
         addProductUrl: addProductUrl,
-        getProductUrl: getProductUrl
+        getProductUrl: getProductUrl,
+        earned_items: earned_items
+
     }
     );
 
@@ -54,21 +62,22 @@ server.get('Show', function (req, res, next) {
 server.post('AddProduct', function (req, res, next) {
     var list = productListHelper.getCurrentOrNewList(req.currentCustomer.raw, { type: 100 });
     var product = JSON.parse(req.querystring.spinObj);
-    var pid = product. productID;
+    var pid = product.productID;
     // var pid = req.form.spinObj.productID;
 
 
     var config = {
-        qty:1,
-        productName:  product.productName,
-        productImage:  product.productImage,
-        description:  product.description,
+        qty: 1,
+        productName: product.productName,
+        productImage: product.productImage,
+        description: product.description,
         req: req,
         type: 100
     };
     var found = productListHelper.itemExists(list, pid, config);
     if (!found) {
         var success = productListHelper.addItem(list, pid, config);
+        var getProductUrl = dw.web.URLUtils.url('SpinningWheel-GetProduct');
         if (success) {
             res.json({
                 success: true,
@@ -86,14 +95,25 @@ server.post('AddProduct', function (req, res, next) {
     }
 
     else {
+
         // var quantity = found.setQuantityValue(found.quantityValue + config.qty);
-        //  var item1 = productListHelper.itemQuantity(list, pid, config);
-        res.json({
-            error: true,
-            pid: pid,
-            // quantity: item1,
-            msg: "The item already exists."
-        })
+        var updated_quantity = productListHelper.itemQuantity(list, pid, config);
+        if(updated_quantity){
+            res.json({
+                message: "The quantity is successfully updated!"
+            })
+        }
+        else {
+            res.json({
+                message: " The quantity is not updated yet!"
+            })
+        }
+        // res.json({
+        //     error: true,
+        //     pid: pid,
+        //     updated_quantity: updated_quantity,
+        //     msg: "The item already exists."
+        // })
 
     }
 
@@ -101,17 +121,26 @@ server.post('AddProduct', function (req, res, next) {
 });
 
 server.get('GetProduct', function (req, res, next) {
-    // var ProductListItemModel = require('*/cartridge/models/productListItem');
-    // var result = {};
-    var list = productListHelper.getCurrentOrNewList(req.currentCustomer.raw, { type: 100 });
-    var temp = list.items[0].ID
-    var temp1 = temp
-    // result.success = true;
-    res.json({
-        success: true
-    });
-    
+    try {
+        var list = productListHelper.getCurrentOrNewList(req.currentCustomer.raw, { type: 100 });
+        var product_item = productListHelper.getItem(list);
+        var dummy = product_item[0].product_status;
+        var abc = "";
+
+        res.json({
+            product_item: product_item,
+            success: true,
+            dummy: dummy
+        });
+
+    } catch (error) {
+        var err = error;
+        var ab = err;
+
+    }
+
     next();
 });
+
 
 module.exports = server.exports();

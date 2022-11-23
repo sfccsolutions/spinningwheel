@@ -98,46 +98,131 @@ function itemExists(list, pid, config) {
  */
 function addItem(list, pid, config) {
     var Transaction = require('dw/system/Transaction');
-
     var ProductMgr = require('dw/catalog/ProductMgr');
     var apiProduct = ProductMgr.getProduct(pid);
+    var Site = require('dw/system/Site');
+    var ExpiryDate = Site.current.getCustomPreferenceValue('SPW_ExpiryPeriod');
+
 
     if (apiProduct && list) {
         try {
+            var productListItem; 
+            var ex_date = new Date();
+            var today_date = ex_date;
+            var current_date = ex_date.setDate(ex_date.getDate() + 7);
+            var status = 
             Transaction.wrap(function () {
-                var productlistItem = list.createProductItem(apiProduct);
-              
+                productListItem = list.createProductItem(apiProduct);
+                var dummy = productListItem;
+                productListItem.custom.ExpiryDate = ex_date;
+                productListItem.custom.Status = "Available";
+
             });
+            var abc = "001";
             return true;
         }
         catch (e) {
+         
+            var error = e;
+            var err = error;
             return false;
         }
 
     }
-   
+
     return false;
 }
 
 
-// function itemQuantity(list, pid, config) {
-//     var Transaction = require('dw/system/Transaction');
-//     var itemExist = itemExists(list, pid, config)
-//     if(itemExist && config.type === 100){
-//         Transaction.wrap(function (){
-//             var quantity = itemExist.setQuantityValue(itemExist.quantityValue + config.qty);
-//         });
-//     }
+function itemQuantity(list, pid, config) {
+    var Transaction = require('dw/system/Transaction');
+    var itemExist = itemExists(list, pid, config)
+    if(itemExist && config.type === 100){
+        Transaction.wrap(function (){
+            var quantity = itemExist.setQuantityValue(itemExist.quantityValue + config.qty);
+        });
+    }
 
-//     return true;
+    return true;
+}
+
+// function itemQuantity(list,config){
+//     var Transaction = require('dw/system/Transaction');
+//     var ProductListItem = require('dw/customer/ProductListItem');
+//     Transaction.wrap(function (){
+//         ProductListItem.setQuantityValue(ProductListItem.quantityValue + config.qty)
+//     });
+
 // }
-   
+
+
+function getItem(list){
+    var ProductList = require('dw/customer/ProductList');
+    var empty_list = [];
+
+    try {
+        // removeList(list);
+        for (var item in list.items) { 
+            var tempp = list.items[item].custom; 
+            var product_name = list.items[item].product.name;
+            var product_expiry = list.items[item].custom.ExpiryDate;
+            var product_status = list.items[item].custom.Status;
+            empty_list.push({product_name,product_expiry,product_status});
+    
+        }
+      return empty_list;
+
+        
+    } catch (error) {
+        var e = error;
+        var temp2 = e;
+        
+    }
+
+}
+
+function removeList(list){
+    var ProductListMgr = require('dw/customer/ProductListMgr');
+    var Transaction = require('dw/system/Transaction');
+    Transaction.wrap(function () {
+    ProductListMgr.removeProductList(list);
+    });
+
+}
+
+// function removeItem(customer, pid, config) {
+//     var Resource = require('dw/web/Resource');
+//     var list = getCurrentOrNewList(customer, config);
+//     var item = itemExists(list, pid, config);
+//     var result = {};
+//     if (item) {
+//         var Transaction = require('dw/system/Transaction');
+//         try {
+//             Transaction.wrap(function () {
+//                 list.removeItem(item);
+//             });
+//         } catch (e) {
+//             result.error = true;
+//             result.msg = Resource.msg('remove.item.failure.msg', 'productlist', null);
+//             result.prodList = null;
+//             return result;
+//         }
+//         result.error = false;
+//         result.prodList = list;
+
+//         if (config.type === 10) {
+//             updateWishlistPrivacyCache(customer, config.req, config);
+//         }
+//     }
+//     return result;
+// }
 
 module.exports = {
     getCurrentOrNewList: getCurrentOrNewList,
     itemExists: itemExists,
-    addItem: addItem
-    // itemQuantity: itemQuantity
-
-
+    addItem: addItem,
+    getItem: getItem,
+    itemQuantity: itemQuantity,
+    removeList: removeList
+   
 };

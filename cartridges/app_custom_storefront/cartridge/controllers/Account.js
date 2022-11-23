@@ -7,6 +7,9 @@
 
 var server = require('server');
 server.extend(module.superModule);
+var URLUtils = require('dw/web/URLUtils');
+var productListHelper = require('*/cartridge/scripts/productList/productListHelpers');
+
 
 /**
  * Any customization on this endpoint, also requires update for Default-Start endpoint
@@ -23,7 +26,17 @@ server.extend(module.superModule);
  * @param {serverfunction} - get
  */
 server.append('Show', function (req, res, next) {
-    res.render('account/accountDashboard');
+
+    var spinningWheelURL = URLUtils.url('SpinningWheel-Show');
+    var list = productListHelper.getCurrentOrNewList(req.currentCustomer.raw, { type: 100 });
+    var earned_items = productListHelper.getItem(list);
+    var temp = earned_items;
+    
+    res.setViewData({
+        spinningWheelURL: spinningWheelURL.toString(),
+        earned_items: earned_items
+
+    })
 
     next();
 });

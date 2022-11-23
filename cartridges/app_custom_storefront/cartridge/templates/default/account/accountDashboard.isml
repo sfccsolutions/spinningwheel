@@ -14,16 +14,56 @@
         <h1 class="page-title">${Resource.msg('page.heading.dashboard', 'account', null)}</h1>
     </div>
 
-    <div class="btns">
-        <button type="button" class="btn btn-info btn1 pull-right position-relative" id="btn-accept">Spin the
-            Wheel</button>
-    </div>
-
     <div class="container">
         <!---Breadcrumbs--->
         <isinclude template="components/breadcrumbs/pageBreadcrumbs" />
-        <isinclude template="account/dashboardProfileCards" />
-    </div>
+        <iscomment>
+            <isinclude template="account/dashboardProfileCards" />
+        </iscomment>
+        <div class="row justify-content-center">
 
-    <isinclude template="account/earnedOffers" />
+            <div class="col-md-6">
+
+                <!---Profile--->
+
+                <isinclude template="account/profileCard" />
+
+                <isif condition="${!pdict.account.isExternallyAuthenticated}">
+
+                    <!---Password--->
+
+                    <isinclude template="account/passwordCard" />
+
+                </isif>
+
+                <!---Address Book--->
+
+                <isinclude template="account/addressBookCard" />
+
+            </div>
+
+            <div class="col-md-6">
+
+                <!---Order History--->
+
+                <isif condition="${pdict.account.orderHistory}">
+
+                    <isset name="order" value="${pdict.account.orderHistory}" scope="page" />
+
+                    <isinclude template="account/order/orderHistoryCard" />
+
+                </isif>
+
+                <!---Payment--->
+
+                <isinclude template="account/paymentCard" />
+
+                <!---Payment--->
+
+                <isinclude template="account/earnedOffers" />
+
+            </div>
+
+        </div>
+    </div>
 </isdecorate>

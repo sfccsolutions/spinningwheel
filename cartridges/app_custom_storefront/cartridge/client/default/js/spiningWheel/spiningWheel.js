@@ -73,10 +73,6 @@ arcs.append("image").attr("transform", function (d) {
 container.on("click", spin);
 function spin(d) {
     
-    $("#btn-accept").show() ;
-    $("#btn-decline").show() ;
-   
-
     container.on("click", null);
     //all slices have been seen, all done
     console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
@@ -123,6 +119,9 @@ function spin(d) {
 
             /* Comment the below line for restrict spin to sngle time */
             container.on("click", spin);
+
+            $("#btn-accept").show() ;
+            $("#btn-decline").show() ;
 
         });
 }

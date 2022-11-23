@@ -1,6 +1,14 @@
 <div class="card">
-    <div class="card-header clearfix pull-right">
-        <h2 class="pull-left">${Resource.msg('label.payment', 'account', null)}</h2>
+    <div class="card-header clearfix">
+        <h2 class="pull-left">
+            <iscomment> ${Resource.msg('label.payment', 'account', null)} </iscomment>
+            Earned Offers
+        </h2>
+        <button type="button" class="btn btn-info btn1 pull-right position-relative" id="btn-accept">
+        <a href="${pdict.spinningWheelURL}" style="color:#FFFFFF;">Spin the Wheel</a> 
+
+           
+        </button>
         <isif condition="${pdict.payment}">
             <a href="${pdict.viewSavedPaymentsUrl}" class="pull-right"
                 aria-label="${Resource.msg('label.payment.viewsavedpaymentmethods', 'account', null)}">${Resource.msg('link.view', 'account', null)}</a>
@@ -14,8 +22,31 @@
     </isif>
     <isif condition="${pdict.addPaymentUrl}">
         <div class="card-footer card-footer-border text-center">
-            <a href="${pdict.addPaymentUrl}" class="card-link"
-                aria-label="${Resource.msg('label.payment.addnewpayment', 'payment', null)}">${Resource.msg('link.addnew', 'account', null)}</a>
+            <iscomment> <a href="${pdict.addPaymentUrl}" class="card-link"
+                    aria-label="${Resource.msg('label.payment.addnewpayment', 'payment', null)}">${Resource.msg('link.addnew', 'account', null)}</a> </iscomment>
+           
+            <div class="tableSet">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Expiry Date</th>
+                            <th>Status</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <isloop items="${pdict.earned_items}" var="offer">
+                    <tr>
+                        <td>${offer.product_name}</td>
+                        <td>${offer.product_expiry}</td>
+                        <td>${offer.product_status}</td>
+                    </tr>
+                </isloop>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </isif>
 </div>

@@ -11043,60 +11043,51 @@ module.exports = function (include) {
 
 module.exports = {
     addSpinnerProduct: function () {
-        $('#btn-accept').on('click',function (e) {
+        $('#btn-accept').on('click', function (e) {
             e.preventDefault();
 
             var dataValue = $('#selectedProduct').val();
             var spinObj = JSON.parse(dataValue);
+            console.log(spinObj);
 
-            console.log(spinObj)
 
             var productURL = $('#addProductUrl').val();
-            console.log(productURL);
-            console.log("Before API call");
 
 
-    //         $('#editWishlistProductModal').spinner().start();
+            //         $('#editWishlistProductModal').spinner().start();
 
             $.ajax({
                 // url: productURL,
                 url: (productURL + "?" + "spinObj=" + dataValue),
                 type: 'post',
                 context: this,
-                data: spinObj,
-                dataType: 'json',
                 success: function (data) {
-                    console.log("In success");
-                    console.log(data);
-
-                 
+                    console.log("getting products");
+                    getSpinnerProduct();
                 },
+
                 error: function (error) {
                     console.log("In error");
                     console.log(error);
-
-                  
-                    
                 }
             });
         });
-    },
 
-    getSpinnerProduct: function () {
-        $('#btn-decline').on('click',function (e) {
-            e.preventDefault();
+        function getSpinnerProduct() {
+            // $('#btn-decline').on('click', function (e) {
+            //     e.preventDefault();
 
             var dataValue = $('#selectedProduct').val();
             var spinObj = JSON.parse(dataValue);
 
-            console.log(spinObj)
+            // console.log(spinObj)
 
             var productURL1 = $('#getProductUrl').val();
-            console.log(productURL1);
-            console.log("Before API call");
+            // console.log(productURL1);
+            // console.log("Before API call");
 
 
-    //         $('#editWishlistProductModal').spinner().start();
+            //         $('#editWishlistProductModal').spinner().start();
 
             $.ajax({
                 // url: productURL,
@@ -11106,23 +11097,78 @@ module.exports = {
                 data: spinObj,
                 dataType: 'json',
                 success: function (data) {
-                    console.log("In success");
-                    console.log(data);
+                    if (data.success) {
+                        var tabledata = $('.tableSet');
+                        tabledata.empty();
+                        if (data.product_item.length === 0) {
 
-                 
+                            tabledata.append("<p>Please add data in table</p>");
+
+                        }
+                        else {
+                            var content = "";
+                            content = content.concat(`
+                                <table class="table table-striped" id="product-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Expiry Date</th>
+                                        <th>Status</th>
+                                        <th>Share</th>
+                    
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                `)
+
+                            for (const item in data.product_item) {
+                                console.log(item);
+                                content = content.concat(`
+                                    <tr>
+                                    <td>${data.product_item[item].product_name}</td>
+                                    <td>${data.product_item[item].product_expiry}</td>
+                                    <td>${data.dummy}</td>
+                                    <td>
+                                        <a class="action-link add-to-cart w-100 text-center checkAddtoCart">
+                                            <span class="fa fa-shopping-cart" aria-hidden="true"></span>
+                                            <span class="">ADD TO CART</span>
+                                        </a>
+                                        <a class="action-link add-to-cart w-100 text-center checkShare">
+                                            <span class="fa fa-share-alt" aria-hidden="true"></span>
+                                            <span class="">SHARE</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                    
+                                    `)
+                            }
+                            content = content.concat(`
+                                </tbody>
+                                </table>
+                                
+                                `)
+                            console.log("anber");
+                            console.log(data);
+                            tabledata.append(content);
+
+                        }
+
+                    }
+                    // console.log("In success");
+                    // console.log(data);
+                    // console.log("abc");
+                    // console.log(data.product_item);
+
+
                 },
                 error: function (error) {
                     console.log("In error");
                     console.log(error);
-
-                  
-                    
                 }
             });
-        });
-    },
+        };
 
-
+    }
 
 }
 
@@ -11209,10 +11255,6 @@ arcs.append("image").attr("transform", function (d) {
 container.on("click", spin);
 function spin(d) {
     
-    jquery__WEBPACK_IMPORTED_MODULE_0__("#btn-accept").show() ;
-    jquery__WEBPACK_IMPORTED_MODULE_0__("#btn-decline").show() ;
-   
-
     container.on("click", null);
     //all slices have been seen, all done
     console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
@@ -11259,6 +11301,9 @@ function spin(d) {
 
             /* Comment the below line for restrict spin to sngle time */
             container.on("click", spin);
+
+            jquery__WEBPACK_IMPORTED_MODULE_0__("#btn-accept").show() ;
+            jquery__WEBPACK_IMPORTED_MODULE_0__("#btn-decline").show() ;
 
         });
 }
