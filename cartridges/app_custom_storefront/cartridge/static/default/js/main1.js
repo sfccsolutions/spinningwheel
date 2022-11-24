@@ -11127,7 +11127,7 @@ module.exports = {
                                     <tr>
                                     <td>${data.product_item[item].product_name}</td>
                                     <td>${data.product_item[item].product_expiry}</td>
-                                    <td>${data.dummy}</td>
+                                    <td>${data.product_item[item].product_status}</td>
                                     <td>
                                         <a class="action-link add-to-cart w-100 text-center checkAddtoCart">
                                             <span class="fa fa-shopping-cart" aria-hidden="true"></span>
@@ -11168,6 +11168,20 @@ module.exports = {
             });
         };
 
+    },
+
+    declineSelectedProduct: function () {
+        $('#btn-decline').on('click', function (e) {
+            e.preventDefault();
+
+            console.log("before");
+
+            $('#selectedProduct').hide();
+
+            console.log("after");
+
+        
+        });
     }
 
 }

@@ -106,14 +106,18 @@ function addItem(list, pid, config) {
 
     if (apiProduct && list) {
         try {
-            var productListItem; 
+            var productListItem;
             var ex_date = new Date();
-            var today_date = ex_date;
             var current_date = ex_date.setDate(ex_date.getDate() + 7);
-            var status = 
+            // var months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+            // var current_datetime = new Date();
+            // var formatted_date = current_datetime.getDate() + "-" + months[current_datetime.getMonth()] + "-" + current_datetime.getFullYear();
+           
+            // var datee = formatted_date;
+        
             Transaction.wrap(function () {
                 productListItem = list.createProductItem(apiProduct);
-                var dummy = productListItem;
+                // var dummy = productListItem;
                 productListItem.custom.ExpiryDate = ex_date;
                 productListItem.custom.Status = "Available";
 
@@ -122,7 +126,7 @@ function addItem(list, pid, config) {
             return true;
         }
         catch (e) {
-         
+
             var error = e;
             var err = error;
             return false;
@@ -137,8 +141,8 @@ function addItem(list, pid, config) {
 function itemQuantity(list, pid, config) {
     var Transaction = require('dw/system/Transaction');
     var itemExist = itemExists(list, pid, config)
-    if(itemExist && config.type === 100){
-        Transaction.wrap(function (){
+    if (itemExist && config.type === 100) {
+        Transaction.wrap(function () {
             var quantity = itemExist.setQuantityValue(itemExist.quantityValue + config.qty);
         });
     }
@@ -156,36 +160,36 @@ function itemQuantity(list, pid, config) {
 // }
 
 
-function getItem(list){
+function getItem(list) {
     var ProductList = require('dw/customer/ProductList');
     var empty_list = [];
 
     try {
         // removeList(list);
-        for (var item in list.items) { 
-            var tempp = list.items[item].custom; 
+        for (var item in list.items) {
+            var tempp = list.items[item].custom;
             var product_name = list.items[item].product.name;
             var product_expiry = list.items[item].custom.ExpiryDate;
             var product_status = list.items[item].custom.Status;
-            empty_list.push({product_name,product_expiry,product_status});
-    
-        }
-      return empty_list;
+            empty_list.push({ product_name,product_expiry,product_status});
 
-        
+        }
+        return empty_list;
+
+
     } catch (error) {
         var e = error;
         var temp2 = e;
-        
+
     }
 
 }
 
-function removeList(list){
+function removeList(list) {
     var ProductListMgr = require('dw/customer/ProductListMgr');
     var Transaction = require('dw/system/Transaction');
     Transaction.wrap(function () {
-    ProductListMgr.removeProductList(list);
+        ProductListMgr.removeProductList(list);
     });
 
 }
@@ -224,5 +228,5 @@ module.exports = {
     getItem: getItem,
     itemQuantity: itemQuantity,
     removeList: removeList
-   
+
 };
