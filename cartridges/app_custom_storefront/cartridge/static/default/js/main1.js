@@ -11058,8 +11058,11 @@ module.exports = {
 
             $.ajax({
                 // url: productURL,
-                url: (productURL + "?" + "spinObj=" + dataValue),
+                url: productURL,
                 type: 'post',
+                data: spinObj,
+                dataType: 'json',
+                // contentType: "application/json", 
                 context: this,
                 success: function (data) {
                     console.log("getting products");
@@ -11077,12 +11080,12 @@ module.exports = {
             // $('#btn-decline').on('click', function (e) {
             //     e.preventDefault();
 
-            var dataValue = $('#selectedProduct').val();
-            var spinObj = JSON.parse(dataValue);
+            // var dataValue = $('#selectedProduct').val();
+            // var spinObj = JSON.parse(dataValue);
 
             // console.log(spinObj)
 
-            var productURL1 = $('#getProductUrl').val();
+            var productURL = $('#getProductUrl').val();
             // console.log(productURL1);
             // console.log("Before API call");
 
@@ -11090,14 +11093,16 @@ module.exports = {
             //         $('#editWishlistProductModal').spinner().start();
 
             $.ajax({
-                // url: productURL,
-                url: (productURL1 + "?" + "spinObj=" + dataValue),
+                url: productURL,
+                // url: (productURL1 + "?" + "spinObj=" + dataValue),
                 type: 'get',
                 context: this,
-                data: spinObj,
-                dataType: 'json',
+                // data: spinObj,
+                // dataType: 'json',
                 success: function (data) {
                     if (data.success) {
+                        console.log("helloo");
+                        console.log(data);
                         var tabledata = $('.tableSet');
                         tabledata.empty();
                         if (data.product_item.length === 0) {
@@ -11170,19 +11175,19 @@ module.exports = {
 
     },
 
-    declineSelectedProduct: function () {
-        $('#btn-decline').on('click', function (e) {
-            e.preventDefault();
+    // declineSelectedProduct: function () {
+    //     $('#btn-decline').on('click', function (e) {
+    //         e.preventDefault();
 
-            console.log("before");
+    //         console.log("before");
 
-            $('#selectedProduct').hide();
+    //         $('#selectedProduct').hide();
 
-            console.log("after");
+    //         console.log("after");
 
         
-        });
-    }
+    //     });
+    // }
 
 }
 

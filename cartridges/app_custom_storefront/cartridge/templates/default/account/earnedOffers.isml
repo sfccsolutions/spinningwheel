@@ -25,7 +25,8 @@
             <iscomment> <a href="${pdict.addPaymentUrl}" class="card-link"
                     aria-label="${Resource.msg('label.payment.addnewpayment', 'payment', null)}">${Resource.msg('link.addnew', 'account', null)}</a> </iscomment>
            
-            <div class="tableSet">
+            <isinclude template="sw/productTable" />
+            <iscomment> <div class="tableSet">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -46,7 +47,7 @@
                 </isloop>
                     </tbody>
                 </table>
-            </div>
+            </div> </iscomment>
         </div>
     </isif>
 </div>

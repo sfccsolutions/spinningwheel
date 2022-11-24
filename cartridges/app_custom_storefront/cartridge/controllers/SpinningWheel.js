@@ -40,14 +40,14 @@ server.get('Show',userLoggedIn.validateLoggedIn,function (req, res, next) {
     var list = productListHelper.getCurrentOrNewList(req.currentCustomer.raw, { type: 100 });
     var earned_items = productListHelper.getItem(list);
     var temp = earned_items;
-   
-
+    
     res.render('sw/spiningWheel', {
         spinerObj: spinerObj,
         addProductUrl: addProductUrl,
         getProductUrl: getProductUrl,
         earned_items: earned_items
-
+      
+        
     }
     );
 
@@ -61,21 +61,22 @@ server.get('Show',userLoggedIn.validateLoggedIn,function (req, res, next) {
 
 server.post('AddProduct', function (req, res, next) {
     var list = productListHelper.getCurrentOrNewList(req.currentCustomer.raw, { type: 100 });
-    var product = JSON.parse(req.querystring.spinObj);
-    var pid = product.productID;
+    var spinObj =  req.form;
+    // var product = req.form.spinObj;
+    var pid = spinObj.productID;
     // var pid = req.form.spinObj.productID;
 
 
     var config = {
         qty: 1,
-        productName: product.productName,
-        productImage: product.productImage,
-        description: product.description,
+        productName: spinObj.productName,
+        productImage: spinObj.productImage,
+        description: spinObj.description,
         req: req,
         type: 100
     };
     var found = productListHelper.itemExists(list, pid, config);
-    if (!found) {
+    // if (!found) {
         var success = productListHelper.addItem(list, pid, config);
         var getProductUrl = dw.web.URLUtils.url('SpinningWheel-GetProduct');
         if (success) {
@@ -90,24 +91,21 @@ server.post('AddProduct', function (req, res, next) {
                 pid: pid,
                 msg: "Unknowmn error!"
             });
-        }
+        
+    // else {
 
-    }
-
-    else {
-
-        // var quantity = found.setQuantityValue(found.quantityValue + config.qty);
-        var updated_quantity = productListHelper.itemQuantity(list, pid, config);
-        if(updated_quantity){
-            res.json({
-                message: "The quantity is successfully updated!"
-            })
-        }
-        else {
-            res.json({
-                message: " The quantity is not updated yet!"
-            })
-        }
+    //     // var quantity = found.setQuantityValue(found.quantityValue + config.qty);
+    //     var updated_quantity = productListHelper.itemQuantity(list, pid, config);
+    //     if(updated_quantity){
+    //         res.json({
+    //             message: "The quantity is successfully updated!"
+    //         })
+    //     }
+    //     else {
+    //         res.json({
+    //             message: " The quantity is not updated yet!"
+    //         })
+    //     }
         // res.json({
         //     error: true,
         //     pid: pid,
@@ -124,13 +122,13 @@ server.get('GetProduct', function (req, res, next) {
     try {
         var list = productListHelper.getCurrentOrNewList(req.currentCustomer.raw, { type: 100 });
         var product_item = productListHelper.getItem(list);
-        var dummy = product_item[0].product_status;
-        var abc = "";
+        // var dummy = product_item[0].product_status;
+        var abc = product_item;
 
         res.json({
             product_item: product_item,
-            success: true,
-            dummy: dummy
+            success: true
+            // dummy: dummy
         });
 
     } catch (error) {

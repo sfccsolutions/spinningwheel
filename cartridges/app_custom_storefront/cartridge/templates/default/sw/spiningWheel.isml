@@ -61,45 +61,7 @@
     </div>
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
-    <div class="tableSet">
-        <isif condition="${pdict.earned_items.length === 0}">
-            <h2>Spin the wheel to win the offers</h2>
-            <iselse>
-            <h2>Won Products</h2>
-                <iscomment> <h2>You have won the offers! ${pdict.earned_items.length}</h2> </iscomment>
-        </isif>
+           <isinclude template="sw/productTable" />
 
-
-        <table class="table table-striped" id="product-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Expiry Date</th>
-                    <th>Status</th>
-                    <th>Share</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <isloop items="${pdict.earned_items}" var="offer">
-                    <tr>
-                        <td>${offer.product_name}</td>
-                        <td>${offer.product_expiry}</td>
-                        <td>${offer.product_status}</td>
-                        <td>
-                            <a class="action-link add-to-cart w-100 text-center checkAddtoCart">
-                                <span class="fa fa-shopping-cart" aria-hidden="true"></span>
-                                <span class="">ADD TO CART</span>
-                            </a>
-                            <a class="action-link add-to-cart w-100 text-center checkShare">
-                                <span class="fa fa-share-alt" aria-hidden="true"></span>
-                                <span class="">SHARE</span>
-                            </a>
-                        </td>
-                    </tr>
-                </isloop>
-
-            </tbody>
-        </table>
-    </div>
+    
 </isdecorate>

@@ -1,3 +1,4 @@
+
 'use strict';
 
 
@@ -108,13 +109,13 @@ function addItem(list, pid, config) {
         try {
             var productListItem;
             var ex_date = new Date();
-            var current_date = ex_date.setDate(ex_date.getDate() + 7);
+            var current_date = ex_date.setDate(ex_date.getDate() - 7);
             // var months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
             // var current_datetime = new Date();
             // var formatted_date = current_datetime.getDate() + "-" + months[current_datetime.getMonth()] + "-" + current_datetime.getFullYear();
-           
+
             // var datee = formatted_date;
-        
+
             Transaction.wrap(function () {
                 productListItem = list.createProductItem(apiProduct);
                 // var dummy = productListItem;
@@ -162,18 +163,31 @@ function itemQuantity(list, pid, config) {
 
 function getItem(list) {
     var ProductList = require('dw/customer/ProductList');
+    var Transaction = require('dw/system/Transaction');
     var empty_list = [];
+    var now = Date.now();
 
     try {
         // removeList(list);
-        for (var item in list.items) {
-            var tempp = list.items[item].custom;
-            var product_name = list.items[item].product.name;
-            var product_expiry = list.items[item].custom.ExpiryDate;
-            var product_status = list.items[item].custom.Status;
-            empty_list.push({ product_name,product_expiry,product_status});
+        Transaction.wrap(function () {
+            for (var item in list.items) {
+                var tempp = list.items[item].custom;
+                var product_name = list.items[item].product.name;
+                var product_expiry = list.items[item].custom.ExpiryDate.toDateString();
+                var product_status = list.items[item].custom.Status;
+                if (Date.parse(product_expiry) <= now && product_status === "Available") {
+                    product_status = "Expired";
+                    list.items[item].custom.Status = "Expired";
 
-        }
+                }
+
+                empty_list.push({ product_name, product_expiry, product_status });
+
+
+            }
+
+        });
+
         return empty_list;
 
 
@@ -193,33 +207,6 @@ function removeList(list) {
     });
 
 }
-
-// function removeItem(customer, pid, config) {
-//     var Resource = require('dw/web/Resource');
-//     var list = getCurrentOrNewList(customer, config);
-//     var item = itemExists(list, pid, config);
-//     var result = {};
-//     if (item) {
-//         var Transaction = require('dw/system/Transaction');
-//         try {
-//             Transaction.wrap(function () {
-//                 list.removeItem(item);
-//             });
-//         } catch (e) {
-//             result.error = true;
-//             result.msg = Resource.msg('remove.item.failure.msg', 'productlist', null);
-//             result.prodList = null;
-//             return result;
-//         }
-//         result.error = false;
-//         result.prodList = list;
-
-//         if (config.type === 10) {
-//             updateWishlistPrivacyCache(customer, config.req, config);
-//         }
-//     }
-//     return result;
-// }
 
 module.exports = {
     getCurrentOrNewList: getCurrentOrNewList,

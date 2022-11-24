@@ -1,0 +1,48 @@
+<div class="tableSet">
+    <isif condition="${pdict.spinerObj}">
+        <isif condition="${pdict.earned_items.length === 0}">
+            <h2>Spin the wheel to win the offers</h2>
+            <iselse>
+                <h2>Won Products</h2>
+            </iselse>
+        </isif>
+    </isif>
+
+    <table class="table table-striped" id="product-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Expiry Date</th>
+                <th>Status</th>
+                <isif condition="${pdict.spinerObj}">
+                    <th>Share</th>
+                </isif>
+
+            </tr>
+        </thead>
+        <tbody>
+            <isloop items="${pdict.earned_items}" var="offer">
+                <tr>
+                    <td>${offer.product_name}</td>
+                    <td>${offer.product_expiry}</td>
+                    <td>${offer.product_status}</td>
+                    <isif condition="${pdict.spinerObj}">
+                        <td>
+
+                            <a class="action-link add-to-cart w-100 text-center checkAddtoCart">
+                                <span class="fa fa-shopping-cart" aria-hidden="true"></span>
+                                <span class="">ADD TO CART</span>
+                            </a>
+                            <a class="action-link add-to-cart w-100 text-center checkShare">
+                                <span class="fa fa-share-alt" aria-hidden="true"></span>
+                                <span class="">SHARE</span>
+                            </a>
+                        </td>
+                    </isif>
+
+                </tr>
+            </isloop>
+
+        </tbody>
+    </table>
+</div>
