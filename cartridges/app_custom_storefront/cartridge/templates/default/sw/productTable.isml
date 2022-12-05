@@ -1,12 +1,22 @@
+<isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addCss('/css/sp/spiningWheel.css')
+</isscript>
+
 <div class="tableSet">
     <isif condition="${pdict.spinerObj}">
         <isif condition="${pdict.earned_items.length === 0}">
             <h2>Spin the wheel to win the offers</h2>
             <iselse>
-                <h2>Won Products</h2>
+                <h2 class="wonProducts">Won Products</h2>
             </iselse>
         </isif>
     </isif>
+
+
+    <iscomment> <input type="hidden" id="earnedItems" value="${JSON.stringify(pdict.earned_items[0])}"> </iscomment>
+
+
 
     <table class="table table-striped" id="product-table">
         <thead>
@@ -21,7 +31,7 @@
             </tr>
         </thead>
         <tbody>
-            <isloop items="${pdict.earned_items}" var="offer">
+            <isloop items="${pdict.earned_items}" var="offer" status="loopstate">
                 <tr>
                     <td>${offer.product_name}</td>
                     <td>${offer.product_expiry}</td>
@@ -33,9 +43,60 @@
                                 <span class="fa fa-shopping-cart" aria-hidden="true"></span>
                                 <span class="">ADD TO CART</span>
                             </a>
-                            <a class="action-link add-to-cart w-100 text-center checkShare">
+                            <iscomment> <a class="action-link add-to-cart w-100 text-center checkShare" title="Share">
+                                    <span class="fa fa-share-alt" aria-hidden="true"></span>
+                                    <span class=""></span>
+                                </a> </iscomment>
+                            <a class="action-link add-to-cart w-100 text-center checkShare" title="Share"
+                                data-toggle="modal" data-target="#exampleModal">
                                 <span class="fa fa-share-alt" aria-hidden="true"></span>
-                                <span class="">SHARE</span>
+                            </a>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="exampleModalLabel">Share</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <form>
+                                                <label class="mailLabel">Enter your Email here:</label>
+                                                <input type="email" name="email" placeholder="Your email ID.."
+                                                    class="email white form-control" id="email"
+                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                                                <div class="valid-feedback feedback-pos">
+                                                    Looks good!
+                                                </div>
+                                                <div class="invalid-feedback feedback-pos">
+                                                    Please input valid email ID
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success">Submit</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <a class="action-link add-to-cart w-100 text-center checkDelete deleteProduct"
+                                title="Delete">
+                                <span class="fa fa-trash-o" aria-hidden="true"></span>
+
+                                <input type="hidden" class="removeProductID" id="removeProductID${loopstate.index}"
+                                    value="${offer.product_id}">
+
                             </a>
                         </td>
                     </isif>

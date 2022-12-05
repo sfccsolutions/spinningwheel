@@ -1,6 +1,5 @@
 .btns {
     display: flex;
-    // margin-top: 20%;
 }
 
 #description {
@@ -14,6 +13,7 @@
 #shareBtn {
     float: right;
     margin-top: 1%;
+    background-color: #008827;
 }
 
 .checkShareBtn {
@@ -31,24 +31,24 @@
 .btn1 {
     margin: 3%;
     margin-left: 26% !important;
+    background-color: #008827;
 }
 
 .btn2 {
     margin: 3%;
     margin-left: 8% !important;
+    background-color: #008827;
 }
 
 text {
     font-family: Helvetica, Arial, sans-serif;
-    font-size: 12px;
+    font-size: 24px;
     pointer-events: none;
     color: white;
 }
 
 #chart {
     position: relative;
-    // width: 500px;
-    // height: 500px;
     top: 15px;
     left: 45px;
 }
@@ -77,10 +77,11 @@ text {
 }
 
 .checkShare {
-    color: #fff !important;
-    background: #008827;
-    padding: 4px 21px;
-    border: 1px solid #008827;
+    color: black;
+}
+
+.checkDelete {
+    color: black;
 }
 
 table tbody {
@@ -104,4 +105,21 @@ a {
 #wheelImages {
     width: 10%;
     height: 10%;
+}
+
+#btn-accept {
+    background-color: #008827;
+    color: #FFFFFF;
+}
+
+.wonProducts {
+    margin-left: 3%;
+}
+
+.mailLabel {
+    float: left;
+}
+
+#exampleModalLabel {
+    font-weight: bold;
 }

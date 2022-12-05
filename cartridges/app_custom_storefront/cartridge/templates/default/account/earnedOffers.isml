@@ -1,7 +1,6 @@
-<div class="card">
+ <iscomment> <div class="card">
     <div class="card-header clearfix">
         <h2 class="pull-left">
-            <iscomment> ${Resource.msg('label.payment', 'account', null)} </iscomment>
             Earned Offers
         </h2>
         <button type="button" class="btn btn-info btn1 pull-right position-relative" id="btn-accept">
@@ -22,32 +21,46 @@
     </isif>
     <isif condition="${pdict.addPaymentUrl}">
         <div class="card-footer card-footer-border text-center">
-            <iscomment> <a href="${pdict.addPaymentUrl}" class="card-link"
-                    aria-label="${Resource.msg('label.payment.addnewpayment', 'payment', null)}">${Resource.msg('link.addnew', 'account', null)}</a> </iscomment>
+           
            
             <isinclude template="sw/productTable" />
-            <iscomment> <div class="tableSet">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Expiry Date</th>
-                            <th>Status</th>
+            
+        </div>
+    </isif>
+</div>  </iscomment>
 
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <isloop items="${pdict.earned_items}" var="offer">
-                    <tr>
-                        <td>${offer.product_name}</td>
-                        <td>${offer.product_expiry}</td>
-                        <td>${offer.product_status}</td>
-                    </tr>
-                </isloop>
-                    </tbody>
-                </table>
-            </div> </iscomment>
+<isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addCss('/css/sp/spiningWheel.css')
+</isscript>
+<div class="card">
+    <div class="card-header clearfix">
+        <h2 class="pull-left">
+            <iscomment> ${Resource.msg('label.payment', 'account', null)} </iscomment>
+            Earned Offers
+        </h2>
+        <button type="button" class="btn btn-info btn1 pull-right position-relative" id="btn-accept">
+            <a href="${pdict.spinningWheelURL}" style="color:#FFFFFF;">Spin the Wheel</a>
+        </button>
+        <isif condition="${pdict.payment}">
+            <a href="${pdict.viewSavedPaymentsUrl}" class="pull-right"
+                aria-label="${Resource.msg('label.payment.viewsavedpaymentmethods', 'account', null)}">${Resource.msg('link.view', 'account', null)}</a>
+        </isif>
+    </div>
+    <isif condition="${pdict.payment}">
+        <div class="card-body card-info-group">
+            <isset name="payment" value="${pdict.payment}" scope="page">
+                <isinclude template="account/payment/savedPayment" />
+        </div>
+    </isif>
+    <isif condition="${pdict.addPaymentUrl}">
+        <div class="card-footer card-footer-border text-center">
+            <iscomment> <a href="${pdict.addPaymentUrl}" class="card-link"
+                    aria-label="${Resource.msg('label.payment.addnewpayment', 'payment', null)}">${Resource.msg('link.addnew', 'account', null)}</a> </iscomment>
+
+            <isinclude template="sw/productTable" />
+           
         </div>
     </isif>
 </div>

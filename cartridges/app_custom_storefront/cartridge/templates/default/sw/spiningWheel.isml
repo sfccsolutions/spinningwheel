@@ -4,6 +4,7 @@
         assets.addJs('/js/main1.js');
         assets.addCss('/css/sp/spiningWheel.css')
     </isscript>
+
     <div class="container">
         <!-- Trigger the modal with a button -->
         <button type="button" id="shareBtn" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
@@ -11,10 +12,13 @@
             Share
         </button>
         <iscomment> ${pdict.spinerObj} </iscomment>
+        <input type="hidden" id="mySpinerOptions" value="${pdict.spinerOptions}">
         <input type="hidden" id="mySpinerData" value="${pdict.spinerObj}">
         <input type="hidden" id="selectedProduct">
         <input type="hidden" id="addProductUrl" value="${pdict.addProductUrl}">
         <input type="hidden" id="getProductUrl" value="${pdict.getProductUrl}">
+        <input type="hidden" id="removeProductUrl" value="${pdict.removeProductUrl}">
+
         <!-- Modal -->
         <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog">
@@ -40,13 +44,13 @@
     </div>
 
     <div class="row">
-        <div class="col-md-5 box1" id="chart"></div>
+        <div class="col-md-5 box1 text-white" id="chart"></div>
 
         <div class="col-md-7 box2" id="question">
             <div>
-                <img id="img" src="" class="productImg" />
-                <h1>We have different options by Spining the Wheel and win!!</h1>
-                <p id="description"></p>
+                    <img id="img" src="" class="productImg" />
+                    <h1>We have different options by Spining the Wheel and win!!</h1>
+                    <p id="description"></p>
 
                 <div class="btns">
                     <button type="button" class="btn btn-info btn1" id="btn-accept">Accept</button>
@@ -61,7 +65,7 @@
     </div>
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
-           <isinclude template="sw/productTable" />
+    <isinclude template="sw/productTable" />
 
-    
+
 </isdecorate>
