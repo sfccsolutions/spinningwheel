@@ -55,13 +55,55 @@ function getSpinnerProduct() {
                                     <span class="fa fa-shopping-cart" aria-hidden="true"></span>
                                     <span class="">ADD TO CART</span>
                                 </a>
-                                <a class="action-link add-to-cart w-100 text-center checkShare" title="Share">
+                                <a class="action-link add-to-cart w-100 text-center checkShare" title="Share"
+                                data-toggle="modal" data-target="#exampleModal">
                                 <span class="fa fa-share-alt" aria-hidden="true"></span>
-                                <span class=""></span>
+                                <input type="hidden" class="shareProductID" id="shareProductID${item}"
+                                    value="${data.product_item[item].product_id}"/>
                             </a>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="exampleModalLabel">Share</h4>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <form>
+                                                <label class="mailLabel">Enter your Email here:</label>
+                                                <input type="email" name="email" placeholder="Your email ID.."
+                                                    class="email white form-control" id="email"
+                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                                                <div class="valid-feedback feedback-pos">
+                                                    Looks good!
+                                                </div>
+                                                <div class="invalid-feedback feedback-pos">
+                                                    Please input valid email ID
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success sendEmail"
+                                                >Submit</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                                 <a class="action-link add-to-cart w-100 text-center checkDelete deleteProduct" title="Delete">
                                 <span class="fa fa-trash-o" aria-hidden="true"></span>
-                                <input type="hidden" class="removeProductID" id="removeProductID${item}" value="${data.product_item[item].product_id}"/>
+                                <input type="hidden" class="removeProductID" id="removeProductID${item}" value="${data.product_item[item].product_list_item_id}"/>
                                  
                             </a>
 
@@ -137,8 +179,6 @@ module.exports = {
 
     },
 
-
-
     removeSelectedItem: function () {
 
         $(document).on('click', '.deleteProduct', function (e) {
@@ -181,5 +221,105 @@ module.exports = {
             });
         });
 
+    },
+
+    shareProduct: function () {
+        $(document).on('click', '.checkShare', function (e) {
+            var indexx = $(this).parent().parent().index();
+            console.log(indexx);
+            var shareProduct = $(`#shareProductID${indexx}`).val();
+            $(`#shareProductId`).val(shareProduct);
+
+            console.log(shareProduct);
+
+        });
+
+        $(document).on('click', '.sendEmail', function (e) {
+            // var parentss = $(this).parent().parent().parent().parent().parent().parent();
+            // console.log(parentss);
+            // var indexx = parentss.index();
+            // console.log(indexx);
+            // console.log(this);
+            // return;
+
+            var productID = $(`#shareProductId`).val(); 
+            console.log(productID);
+           // var pID = $(`#shareProductID${productID}`).val();
+            // console.log(pID);
+            
+            console.log("inside sharee");
+            var shareProductUrl = $('#shareProductUrl').val();
+            console.log(shareProductUrl);
+
+            var getEmail = $('#email').val();
+            var listOfEmails = getEmail;
+            console.log(listOfEmails);
+
+            $.ajax({
+                url:shareProductUrl,
+                type: 'post',
+                context: this,
+                data: {listOfEmails, productID},
+                dataType: 'json',
+                success: function (data) {
+                    console.log("in success");
+                    if (data.success) {
+                        console.log("data sucesss");
+                        console.log(data);
+                    }
+
+                },
+
+                error: function (error) {
+                    console.log("In error");
+                    console.log(error);
+                }
+            });
+        });
+
+
+
+    },
+
+    shareSpinningWheelPage: function () {
+        $(document).on('click', '#shareBtn', function (e) {
+            e.preventDefault();
+
+            console.log("insidee shareWheelPage");
+            
+            var shareWheelPageURL = $('#shareWheelPageUrl').val();
+            console.log(shareWheelPageURL);
+
+            $(document).on('click', '.sharePage', function (e) {
+            var getEmail = $('#emailId').val();
+            var listOfEmails = getEmail;
+            console.log(listOfEmails);
+        
+            $.ajax({
+                url: shareWheelPageURL,
+                type: 'post',
+                data: {listOfEmails},
+                dataType: 'json',
+                context: this,
+                success: function (data) {
+                    console.log("in sucesss of sharePage");
+                    if (data.success) {
+                        console.log("yeahh successs");
+                        console.log(data);
+                    }
+
+                },
+
+                error: function (error) {
+                    console.log("Oops in error");
+                    console.log(error);
+                }
+            });
+        });
+    });
+
     }
+    
+
+
 }

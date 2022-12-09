@@ -1,0 +1,24 @@
+<body>
+
+    <iscomment>
+        <isset name="emailTemplate" value="${true}" scope="page" />
+    </iscomment>
+    <iscomment>
+        <isset name="shareCart" value="${true}" scope="page" />
+    </iscomment>
+    <h3>${"Dear Customer!"}</h3>
+    <p>${"Here are the shared product details: "}</p>
+    <form action="${pdict.url}" method="get">
+        <input type="hidden" name="pid" value="${pdict.productId}" />
+
+        <iscomment> <input type="hidden" name="lineItems" value="${pdict.lineItems}" /> </iscomment>
+        <button type="submit" class="btn btn-save btn-block btn-primary">${"Continue"}</button>
+    </form>
+
+    <h2>${pdict.productName}
+    </h2>
+    <a href="${pdict.url}?pid=${pdict.productId}">
+        <img src="${pdict.productImage}" alt="${pdict.productName}" />
+
+    </a>
+</body>

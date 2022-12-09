@@ -34,6 +34,8 @@ server.get('Show', userLoggedIn.validateLoggedIn, function (req, res, next) {
     var Site = require('dw/system/Site');
     var ProductFactory = require('*/cartridge/scripts/factories/product');
     var spinerOptions = Site.current.getCustomPreferenceValue('spinerOptions');
+    var shareProductUrl = dw.web.URLUtils.url('SpinningWheel-shareProduct');
+    var shareWheelPageUrl = dw.web.URLUtils.url('SpinningWheel-shareWheelPage');
     var addProductUrl = dw.web.URLUtils.url('SpinningWheel-AddProduct');
     var getProductUrl = dw.web.URLUtils.url('SpinningWheel-GetProduct');
     var removeProductUrl = dw.web.URLUtils.url('SpinningWheel-removeSelectedProduct');
@@ -44,22 +46,20 @@ server.get('Show', userLoggedIn.validateLoggedIn, function (req, res, next) {
     var list = productListHelper.getCurrentOrNewList(req.currentCustomer.raw, { type: 100 });
     var earned_items = productListHelper.getItem(list);
 
+
     res.render('sw/spiningWheel', {
         spinerObj: spinerObj,
         addProductUrl: addProductUrl,
         getProductUrl: getProductUrl,
         removeProductUrl: removeProductUrl,
         earned_items: earned_items,
-        spinerOptions: spinerOptions
+        spinerOptions: spinerOptions,
+        shareProductUrl: shareProductUrl,
+        shareWheelPageUrl: shareWheelPageUrl 
 
 
     }
     );
-
-    // res.setViewData({
-    //     spinerObj: spinerObj
-    //    
-    // })
 
     next();
 });
@@ -149,6 +149,7 @@ server.post('removeSelectedProduct', function (req, res, next) {
     var pid = req.form.deleteProduct;
     var list = productListHelper.getCurrentOrNewList(req.currentCustomer.raw, { type: 100 });
     var removeProduct = productListHelper.removeItem(list, pid);
+    var temp = removeProduct;
 
     if (typeof pid === undefined || !pid) {
         res.json({
@@ -165,6 +166,62 @@ server.post('removeSelectedProduct', function (req, res, next) {
     });
 
     next();
+});
+
+
+server.post('shareProduct', function (req, res, next) {
+    var spinningWheelHelpers = require('*/cartridge/scripts/helpers/spinningWheelHelpers');
+    var productId = req.form.productID;
+    var url = URLUtils.https("Product-Show");
+    // var url = p_url.split('?pid=')[1]
+    // url+= '?pid=' + productId;
+    // var url = dw.web.URLUtils.url("Product-Show");
+    // url += "?pid=" + productId;
+    var recipients = req.form.listOfEmails;
+    var invalidEmail = spinningWheelHelpers.validateEmail(recipients);
+    if (invalidEmail && invalidEmail.length < 1) {
+        var getProduct = spinningWheelHelpers.getProducts(productId);
+        var sendEmail = spinningWheelHelpers.sendEmail(recipients, url, getProduct, productId);
+        res.json({
+            success: true
+
+        })
+    }
+    else {
+        res.json({
+            error: true
+        });
+
+    }
+
+
+
+    next();
+
+
+});
+
+server.post('shareWheelPage', function (req, res, next) {
+    var URLUtils = require('dw/web/URLUtils');
+    var spinningWheelHelpers = require('*/cartridge/scripts/helpers/spinningWheelHelpers');
+    var page_url = URLUtils.https("SpinningWheel-Show");
+    var recipients = req.form.listOfEmails;
+    var invalidEmail = spinningWheelHelpers.validateEmail(recipients);
+    if (invalidEmail && invalidEmail.length < 1) {
+        var sendEmail = spinningWheelHelpers.sharePage(recipients, page_url);
+        res.json({
+            success: true
+        })
+    }
+    else {
+        res.json({
+            error: true
+        });
+
+    }
+
+    next();
+
 });
 
 

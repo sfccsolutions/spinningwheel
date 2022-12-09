@@ -11096,13 +11096,55 @@ function getSpinnerProduct() {
                                     <span class="fa fa-shopping-cart" aria-hidden="true"></span>
                                     <span class="">ADD TO CART</span>
                                 </a>
-                                <a class="action-link add-to-cart w-100 text-center checkShare" title="Share">
+                                <a class="action-link add-to-cart w-100 text-center checkShare" title="Share"
+                                data-toggle="modal" data-target="#exampleModal">
                                 <span class="fa fa-share-alt" aria-hidden="true"></span>
-                                <span class=""></span>
+                                <input type="hidden" class="shareProductID" id="shareProductID${item}"
+                                    value="${data.product_item[item].product_id}"/>
                             </a>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="exampleModalLabel">Share</h4>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <form>
+                                                <label class="mailLabel">Enter your Email here:</label>
+                                                <input type="email" name="email" placeholder="Your email ID.."
+                                                    class="email white form-control" id="email"
+                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                                                <div class="valid-feedback feedback-pos">
+                                                    Looks good!
+                                                </div>
+                                                <div class="invalid-feedback feedback-pos">
+                                                    Please input valid email ID
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success sendEmail"
+                                                >Submit</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                                 <a class="action-link add-to-cart w-100 text-center checkDelete deleteProduct" title="Delete">
                                 <span class="fa fa-trash-o" aria-hidden="true"></span>
-                                <input type="hidden" class="removeProductID" id="removeProductID${item}" value="${data.product_item[item].product_id}"/>
+                                <input type="hidden" class="removeProductID" id="removeProductID${item}" value="${data.product_item[item].product_list_item_id}"/>
                                  
                             </a>
 
@@ -11178,8 +11220,6 @@ module.exports = {
 
     },
 
-
-
     removeSelectedItem: function () {
 
         $(document).on('click', '.deleteProduct', function (e) {
@@ -11222,7 +11262,107 @@ module.exports = {
             });
         });
 
+    },
+
+    shareProduct: function () {
+        $(document).on('click', '.checkShare', function (e) {
+            var indexx = $(this).parent().parent().index();
+            console.log(indexx);
+            var shareProduct = $(`#shareProductID${indexx}`).val();
+            $(`#shareProductId`).val(shareProduct);
+
+            console.log(shareProduct);
+
+        });
+
+        $(document).on('click', '.sendEmail', function (e) {
+            // var parentss = $(this).parent().parent().parent().parent().parent().parent();
+            // console.log(parentss);
+            // var indexx = parentss.index();
+            // console.log(indexx);
+            // console.log(this);
+            // return;
+
+            var productID = $(`#shareProductId`).val(); 
+            console.log(productID);
+           // var pID = $(`#shareProductID${productID}`).val();
+            // console.log(pID);
+            
+            console.log("inside sharee");
+            var shareProductUrl = $('#shareProductUrl').val();
+            console.log(shareProductUrl);
+
+            var getEmail = $('#email').val();
+            var listOfEmails = getEmail;
+            console.log(listOfEmails);
+
+            $.ajax({
+                url:shareProductUrl,
+                type: 'post',
+                context: this,
+                data: {listOfEmails, productID},
+                dataType: 'json',
+                success: function (data) {
+                    console.log("in success");
+                    if (data.success) {
+                        console.log("data sucesss");
+                        console.log(data);
+                    }
+
+                },
+
+                error: function (error) {
+                    console.log("In error");
+                    console.log(error);
+                }
+            });
+        });
+
+
+
+    },
+
+    shareSpinningWheelPage: function () {
+        $(document).on('click', '#shareBtn', function (e) {
+            e.preventDefault();
+
+            console.log("insidee shareWheelPage");
+            
+            var shareWheelPageURL = $('#shareWheelPageUrl').val();
+            console.log(shareWheelPageURL);
+
+            $(document).on('click', '.sharePage', function (e) {
+            var getEmail = $('#emailId').val();
+            var listOfEmails = getEmail;
+            console.log(listOfEmails);
+        
+            $.ajax({
+                url: shareWheelPageURL,
+                type: 'post',
+                data: {listOfEmails},
+                dataType: 'json',
+                context: this,
+                success: function (data) {
+                    console.log("in sucesss of sharePage");
+                    if (data.success) {
+                        console.log("yeahh successs");
+                        console.log(data);
+                    }
+
+                },
+
+                error: function (error) {
+                    console.log("Oops in error");
+                    console.log(error);
+                }
+            });
+        });
+    });
+
     }
+    
+
+
 }
 
 
@@ -11234,197 +11374,6 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-// /* <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> */
-// import * as $ from 'jquery'
-// $("#btn-accept").hide();
-// $("#btn-decline").hide();
-
-// //import $ from 'jquery' ;
-// var padding = { top: 20, right: 40, bottom: 0, left: 0 },
-//     w = 400 - padding.left - padding.right,
-//     h = 400 - padding.top - padding.bottom,
-//     r = Math.min(w, h) / 2,
-//     rotation = 0,
-//     oldrotation = 0,
-//     picked = 100000,
-//     oldpick = [],
-//     color = d3.scale.category20();//category20c()
-// var dataValue = $('#mySpinerData').val();
-// var spinOptions = $('#mySpinerOptions').val();
-// console.log("anber");
-// console.log(spinOptions);
-// if(spinOptions === "Products"){
-//     var data = JSON.parse(dataValue);
-// }
-// else{
-//     dataValue = dataValue.substring(1,dataValue.length-1);
-//     var data = dataValue.split(',');
-//     console.log(data);
-// }
-// var svg = d3.select('#chart')
-//     .append("svg")
-//     .data([data])
-//     .attr("width", w + padding.left + padding.right)
-//     .attr("height", h + padding.top + padding.bottom)
-//     .style({ "margin-left": "-12%" });
-
-// var container = svg.append("g")
-//     .attr("class", "chartholder")
-//     .attr("transform", "translate(" + (w / 2 + padding.left) + "," + (h / 2 + padding.top) + ")");
-// var vis = container
-//     .append("g");
-
-// var pie = d3.layout.pie().sort(null).value(function (d) { return 1; });
-// // declare an arc generator function
-// var arc = d3.svg.arc().outerRadius(r);
-// // select paths, use arc generator to draw
-// var arcs = vis.selectAll("g.slice")
-//     .data(pie)
-//     .enter()
-//     .append("g")
-//     .attr("class", "slice")
-//     .attr("title", data[1].productName);
-
-// arcs.append("path")
-//     // .attr("fill", function (d, i) { return color(i); })
-//     .attr("d", function (d) { return arc(d); })
-//     .attr("title", data[1].productName);
-
-// // add the text
-// if(spinOptions === "Points"){
-// arcs.append("text").attr("transform", function (d) {
-//     d.innerRadius = 0;
-//     d.outerRadius = r;
-//     d.angle = (d.startAngle + d.endAngle) / 2;
-//     return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 10) + ")";
-// })
-//     .attr("text-anchor", "end")
-// .text(function (d, i) {
-//     // console.log(data," ", i);
-//     // console.log("********");
-//     return data[i];
-// })
-
-// }
-
-// if(spinOptions === "Products"){
-// arcs.append("image").attr("transform", function (d) {
-//     d.innerRadius = 0;
-//     d.outerRadius = r;
-//     d.angle = (d.startAngle + d.endAngle) / 2;
-//     return "rotate(" + (d.angle * 180 / Math.PI - 100) + ")translate(" + (d.outerRadius - 70) + ")";
-// })
-//     .attr("href", function (d, i) {
-//         return data[i].productImage;
-//     })
-//     .attr("id", "wheelImages")
-//     .attr("title", "Images")
-//     // .attr("href", data[2].productImage)
-//     .attr("alt", "images");
-
-// }
-
-// container.on("click", spin);
-// function spin(d) {
-
-//     container.on("click", null);
-//     //all slices have been seen, all done
-//     console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
-//     if (oldpick.length == data.length) {
-//         console.log("done");
-//         container.on("click", null);
-//         return;
-//     }
-//     var ps = 360 / data.length,
-//         pieslice = Math.round(1440 / data.length),
-//         rng = Math.floor((Math.random() * 1440) + 360);
-
-//     rotation = (Math.round(rng / ps) * ps);
-
-//     picked = Math.round(data.length - (rotation % 360) / ps);
-//     picked = picked >= data.length ? (picked % data.length) : picked;
-//     if (oldpick.indexOf(picked) !== -1) {
-//         d3.select(this).call(spin);
-//         return;
-//     } else {
-//         oldpick.push(picked);
-//     }
-//     rotation += 90 - Math.round(ps / 2);
-//     vis.transition()
-//         .duration(3000)
-//         .attrTween("transform", rotTween)
-//         .each("end", function () {
-//             //mark question as seen
-//             d3.select(".slice:nth-child(" + (picked + 1) + ") path")
-//              $('#selectedProduct').val(JSON.stringify(data[picked]));
-
-//             // .attr("fill", "#111")
-//             //populate question
-//             d3.select("#question h1")
-//                 .text(data[picked].productName)
-//             document.getElementById('img').src = data[picked].productImage;
-//             d3.select("#question p")
-//                 .text(data[picked].description)
-
-//             oldrotation = rotation;
-
-//             /* Get the result value from object "data" */
-//             console.log(data[picked].productID)
-
-//             /* Comment the below line for restrict spin to sngle time */
-//             container.on("click", spin);
-
-//             $("#btn-accept").show() ;
-//             $("#btn-decline").show() ;
-
-//         });
-// }
-
-
-// //make arrow
-// svg.append("g")
-//     .attr("transform", "translate(" + (w + padding.left + padding.right) + "," + ((h / 2) + padding.top) + ")")
-//     .append("path")
-//     .attr("d", "M-" + (r * .15) + ",0L0," + (r * .05) + "L0,-" + (r * .05) + "Z")
-// // .style({ "fill": "black" });
-// //draw spin circle
-// container.append("circle")
-//     .attr("cx", 0)
-//     .attr("cy", 0)
-//     .attr("r", 30)
-//     .style({ "fill": "white", "cursor": "pointer" });
-// //spin text
-// container.append("text")
-//     .attr("x", 0)
-//     .attr("y", 7)
-//     .attr("text-anchor", "middle")
-//     .text("SPIN")
-//     .style({ "font-weight": "bold", "font-size": "15px" });
-
-
-// function rotTween(to) {
-//     var i = d3.interpolate(oldrotation % 360, rotation);
-//     return function (t) {
-//         return "rotate(" + i(t) + ")";
-//     };
-// }
-
-
-// function getRandomNumbers() {
-//     var array = new Uint16Array(1000);
-//     var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
-//     if (window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues === "function") {
-//         window.crypto.getRandomValues(array);
-//         console.log("works");
-//     } else {
-//         //no support for crypto, get crappy random numbers
-//         for (var i = 0; i < 1000; i++) {
-//             array[i] = Math.floor(Math.random() * 100000) + 1;
-//         }
-//     }
-//     return array;
-// }
-
 /* <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> */
 
 jquery__WEBPACK_IMPORTED_MODULE_0__("#btn-accept").hide();
@@ -11477,7 +11426,7 @@ var arcs = vis.selectAll("g.slice")
     .attr("title", data[1].productName);
 
 arcs.append("path")
-    // .attr("fill", function (d, i) { return color(i); })
+    .attr("fill", function (d, i) { return color(i); })
     .attr("d", function (d) { return arc(d); })
     .attr("title", data[1].productName);
 
@@ -11487,13 +11436,11 @@ if (spinOptions === "Points") {
         d.innerRadius = 0;
         d.outerRadius = r;
         d.angle = (d.startAngle + d.endAngle) / 2;
-        return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 10) + ")";
+        return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 35) + ")";
     })
         .attr("text-anchor", "end")
         .style({ "fill": "white" })
         .text(function (d, i) {
-            // console.log(data," ", i);
-            // console.log("********");
             return data[i];
         })
 
@@ -11550,7 +11497,8 @@ function spin(d) {
             d3.select(".slice:nth-child(" + (picked + 1) + ") path")
             jquery__WEBPACK_IMPORTED_MODULE_0__('#selectedProduct').val(JSON.stringify(data[picked]));
 
-
+            if (spinOptions === "Products") {
+    
             // .attr("fill", "#111")
             //populate question
             d3.select("#question h1")
@@ -11559,20 +11507,27 @@ function spin(d) {
             d3.select("#question p")
                 .text(data[picked].description)
 
-            oldrotation = rotation;
+            console.log("Helloooo");
 
             /* Get the result value from object "data" */
             console.log(data[picked].productID)
 
             /* Comment the below line for restrict spin to sngle time */
+
+                jquery__WEBPACK_IMPORTED_MODULE_0__("#btn-accept").show();
+                jquery__WEBPACK_IMPORTED_MODULE_0__("#btn-decline").show();
+
+            }
+            else {
+                
+                jquery__WEBPACK_IMPORTED_MODULE_0__("#question h1")
+                .text("Congratulations!! You have earned " + data[picked] + " Points.")
+
+            }
+            oldrotation = rotation;
             container.on("click", spin);
-
-            jquery__WEBPACK_IMPORTED_MODULE_0__("#btn-accept").show();
-            jquery__WEBPACK_IMPORTED_MODULE_0__("#btn-decline").show();
-
         });
 }
-
 
 //make arrow
 svg.append("g")

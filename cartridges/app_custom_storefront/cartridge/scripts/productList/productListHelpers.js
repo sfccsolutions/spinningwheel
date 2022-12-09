@@ -173,7 +173,8 @@ function getItem(list) {
             for (var item in list.items) {
                 // var tempp = list.items[item].custom;
                 var product_name = list.items[item].product.name;
-                var product_id = list.items[item].ID;
+                var product_list_item_id = list.items[item].ID;
+                var product_id = list.items[item].productID;
                 var product_expiry = list.items[item].custom.ExpiryDate.toDateString();
                 var product_status = list.items[item].custom.Status;
                 if (Date.parse(product_expiry) <= now && product_status === "Available") {
@@ -182,7 +183,7 @@ function getItem(list) {
 
                 }
 
-                empty_list.push({ product_name, product_expiry, product_status, product_id });
+                empty_list.push({ product_name, product_expiry, product_status, product_id, product_list_item_id });
 
 
             }

@@ -3,107 +3,118 @@
         assets.addCss('/css/sp/spiningWheel.css')
 </isscript>
 
-<div class="tableSet">
-    <isif condition="${pdict.spinerObj}">
-        <isif condition="${pdict.earned_items.length === 0}">
-            <h2>Spin the wheel to win the offers</h2>
-            <iselse>
-                <h2 class="wonProducts">Won Products</h2>
-            </iselse>
+
+    <input type="hidden" id="shareProductId" value=""/>
+
+<isif condition="${pdict.spinerOptions.value === "Products"}">
+    <div class="tableSet">
+        <isif condition="${pdict.spinerObj}">
+            <isif condition="${pdict.earned_items.length === 0}">
+                <h2>Spin the wheel to win the offers</h2>
+                <iselse>
+                    <h2 class="wonProducts">Won Products</h2>
+                </iselse>
+            </isif>
         </isif>
-    </isif>
-
-
-    <iscomment> <input type="hidden" id="earnedItems" value="${JSON.stringify(pdict.earned_items[0])}"> </iscomment>
 
 
 
-    <table class="table table-striped" id="product-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Expiry Date</th>
-                <th>Status</th>
-                <isif condition="${pdict.spinerObj}">
-                    <th>Share</th>
-                </isif>
-
-            </tr>
-        </thead>
-        <tbody>
-            <isloop items="${pdict.earned_items}" var="offer" status="loopstate">
+        <table class="table table-striped" id="product-table">
+            <thead>
                 <tr>
-                    <td>${offer.product_name}</td>
-                    <td>${offer.product_expiry}</td>
-                    <td>${offer.product_status}</td>
+                    <th>Name</th>
+                    <th>Expiry Date</th>
+                    <th>Status</th>
                     <isif condition="${pdict.spinerObj}">
-                        <td>
-
-                            <a class="action-link add-to-cart w-100 text-center checkAddtoCart">
-                                <span class="fa fa-shopping-cart" aria-hidden="true"></span>
-                                <span class="">ADD TO CART</span>
-                            </a>
-                            <iscomment> <a class="action-link add-to-cart w-100 text-center checkShare" title="Share">
-                                    <span class="fa fa-share-alt" aria-hidden="true"></span>
-                                    <span class=""></span>
-                                </a> </iscomment>
-                            <a class="action-link add-to-cart w-100 text-center checkShare" title="Share"
-                                data-toggle="modal" data-target="#exampleModal">
-                                <span class="fa fa-share-alt" aria-hidden="true"></span>
-                            </a>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="exampleModalLabel">Share</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-
-                                            <form>
-                                                <label class="mailLabel">Enter your Email here:</label>
-                                                <input type="email" name="email" placeholder="Your email ID.."
-                                                    class="email white form-control" id="email"
-                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
-                                                <div class="valid-feedback feedback-pos">
-                                                    Looks good!
-                                                </div>
-                                                <div class="invalid-feedback feedback-pos">
-                                                    Please input valid email ID
-                                                </div>
-
-                                            </form>
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-success">Submit</button>
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <a class="action-link add-to-cart w-100 text-center checkDelete deleteProduct"
-                                title="Delete">
-                                <span class="fa fa-trash-o" aria-hidden="true"></span>
-
-                                <input type="hidden" class="removeProductID" id="removeProductID${loopstate.index}"
-                                    value="${offer.product_id}">
-
-                            </a>
-                        </td>
+                        <th>Share</th>
                     </isif>
 
                 </tr>
-            </isloop>
+            </thead>
+            <tbody>
+                <isloop items="${pdict.earned_items}" var="offer" status="loopstate">
+                    <tr>
+                        <td>${offer.product_name}</td>
+                        <td>${offer.product_expiry}</td>
+                        <td>${offer.product_status}</td>
+                        <isif condition="${pdict.spinerObj}">
+                            <td>
 
-        </tbody>
-    </table>
-</div>
+                                <a class="action-link add-to-cart w-100 text-center checkAddtoCart">
+                                    <span class="fa fa-shopping-cart" aria-hidden="true"></span>
+                                    <span class="">ADD TO CART</span>
+                                </a>
+                                <iscomment> <a class="action-link add-to-cart w-100 text-center checkShare"
+                                        title="Share">
+                                        <span class="fa fa-share-alt" aria-hidden="true"></span>
+                                        <span class=""></span>
+                                    </a> </iscomment>
+                                <a class="action-link add-to-cart w-100 text-center checkShare" title="Share"
+                                    data-toggle="modal" data-target="#exampleModal">
+                                    <span class="fa fa-share-alt" aria-hidden="true"></span>
+                                    <input type="hidden" class="shareProductID" id="shareProductID${loopstate.index}"
+                                        value="${offer.product_id}"/>
+                                </a>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="exampleModalLabel">Share</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <form>
+                                                    <label class="mailLabel">Enter your Email here:</label>
+                                                    <input type="email" name="email" placeholder="Your email ID.."
+                                                        class="email white form-control" id="email"
+                                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                                                    <div class="valid-feedback feedback-pos">
+                                                        Looks good!
+                                                    </div>
+                                                    <div class="invalid-feedback feedback-pos">
+                                                        Please input valid email ID
+                                                    </div>
+
+                                                </form>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-success sendEmail"
+                                                    >Submit</button>
+                                                <iscomment> <input type="hidden" class="shareProductID"
+                                                    id="shareProductID${loopstate.index}" value="${offer.product_id}"> </iscomment>
+
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <a class="action-link add-to-cart w-100 text-center checkDelete deleteProduct"
+                                    title="Delete">
+                                    <span class="fa fa-trash-o" aria-hidden="true"></span>
+
+                                    <input type="hidden" class="removeProductID" id="removeProductID${loopstate.index}"
+                                        value="${offer.product_list_item_id}"/>
+
+                                </a>
+                            </td>
+                        </isif>
+
+                    </tr>
+                </isloop>
+
+            </tbody>
+        </table>
+    </div>
+
+</isif>

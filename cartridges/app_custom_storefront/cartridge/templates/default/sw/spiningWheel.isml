@@ -11,13 +11,6 @@
             <span class="fa fa-share-alt" id="shareIcon" aria-hidden="true"></span>
             Share
         </button>
-        <iscomment> ${pdict.spinerObj} </iscomment>
-        <input type="hidden" id="mySpinerOptions" value="${pdict.spinerOptions}">
-        <input type="hidden" id="mySpinerData" value="${pdict.spinerObj}">
-        <input type="hidden" id="selectedProduct">
-        <input type="hidden" id="addProductUrl" value="${pdict.addProductUrl}">
-        <input type="hidden" id="getProductUrl" value="${pdict.getProductUrl}">
-        <input type="hidden" id="removeProductUrl" value="${pdict.removeProductUrl}">
 
         <!-- Modal -->
         <div class="modal fade" id="myModal" role="dialog">
@@ -26,38 +19,68 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">You can also share</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="exampleModalLabel">Share</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                     <div class="modal-body">
-                        <iscomment> <button type="button" class="btn btn-info btn1">Accept</button>
-                            <button type="button" class="btn btn-info btn2" data-dismiss="modal">Decline</button>
-                        </iscomment>
+
+                        <form>
+                            <label class="mailLabel">Enter your Email here:</label>
+                            <input type="email" name="email" placeholder="Your email ID.."
+                                class="email white form-control" id="emailId"
+                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                            <div class="valid-feedback feedback-pos">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback feedback-pos">
+                                Please input valid email ID
+                            </div>
+
+                        </form>
+
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success sharePage">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
 
             </div>
         </div>
+
+        <iscomment> ${pdict.spinerObj} </iscomment>
+        <input type="hidden" id="mySpinerOptions" value="${pdict.spinerOptions}">
+        <input type="hidden" id="mySpinerData" value="${pdict.spinerObj}">
+        <input type="hidden" id="selectedProduct">
+        <input type="hidden" id="shareProductUrl" value="${pdict.shareProductUrl}">
+        <input type="hidden" id="shareWheelPageUrl" value="${pdict.shareWheelPageUrl}">
+        <input type="hidden" id="addProductUrl" value="${pdict.addProductUrl}">
+        <input type="hidden" id="getProductUrl" value="${pdict.getProductUrl}">
+        <input type="hidden" id="removeProductUrl" value="${pdict.removeProductUrl}">
+
+
     </div>
 
-    <div class="row">
+    <div class="row pointsProducts" >
         <div class="col-md-5 box1 text-white" id="chart"></div>
 
         <div class="col-md-7 box2" id="question">
             <div>
+                <isif condition="${pdict.spinerOptions.value === "Products"}">
                     <img id="img" src="" class="productImg" />
-                    <h1>We have different options by Spining the Wheel and win!!</h1>
+                    <h1>Spin the Wheel to Win Amazing Products!!</h1>
                     <p id="description"></p>
 
-                <div class="btns">
-                    <button type="button" class="btn btn-info btn1" id="btn-accept">Accept</button>
-                    <button type="button" class="btn btn-info btn2" data-dismiss="modal"
-                        id="btn-decline">Decline</button>
-                </div>
-
+                    <div class="btns">
+                        <button type="button" class="btn btn-info btn1" id="btn-accept">Accept</button>
+                        <button type="button" class="btn btn-info btn2" data-dismiss="modal"
+                            id="btn-decline">Decline</button>
+                    </div>
+                    <iselse>
+                        <h1>Spin the Wheel and Earn the Points!!</h1>
+                </isif>
 
             </div>
 

@@ -1,0 +1,10 @@
+<body>
+    <h3>${"Dear Customer!"}</h3>
+    <p>${"Hit the button to view the Spinning Wheel Page!"}</p>
+    <form action="${pdict.page_url}" method="get">
+        <iscomment> <h2>${pdict.page_url}</h2> </iscomment>
+         <input type="hidden" name="pid" />
+        <button type="submit" class="btn btn-save btn-block btn-primary">${"View Page"}</button>
+    </form>
+
+</body>
