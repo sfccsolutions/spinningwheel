@@ -1,5 +1,7 @@
 'use strict';
 
+const { error } = require("jquery");
+
 
 function getSpinnerProduct() {
 
@@ -54,6 +56,8 @@ function getSpinnerProduct() {
                                 <a class="action-link add-to-cart w-100 text-center checkAddtoCart">
                                     <span class="fa fa-shopping-cart" aria-hidden="true"></span>
                                     <span class="">ADD TO CART</span>
+                                    <input type="hidden" class="addToCartID" id="addToCartID${item}"
+                                    value="${data.product_item[item].product_id}"/>
                                 </a>
                                 <a class="action-link add-to-cart w-100 text-center checkShare" title="Share"
                                 data-toggle="modal" data-target="#exampleModal">
@@ -242,11 +246,11 @@ module.exports = {
             // console.log(this);
             // return;
 
-            var productID = $(`#shareProductId`).val(); 
+            var productID = $(`#shareProductId`).val();
             console.log(productID);
-           // var pID = $(`#shareProductID${productID}`).val();
+            // var pID = $(`#shareProductID${productID}`).val();
             // console.log(pID);
-            
+
             console.log("inside sharee");
             var shareProductUrl = $('#shareProductUrl').val();
             console.log(shareProductUrl);
@@ -256,10 +260,10 @@ module.exports = {
             console.log(listOfEmails);
 
             $.ajax({
-                url:shareProductUrl,
+                url: shareProductUrl,
                 type: 'post',
                 context: this,
-                data: {listOfEmails, productID},
+                data: { listOfEmails, productID },
                 dataType: 'json',
                 success: function (data) {
                     console.log("in success");
@@ -281,45 +285,97 @@ module.exports = {
 
     },
 
+    addToCartFromSpinningWheel: function () {
+        $(document).on('click', '.checkAddtoCart', function () {
+            console.log("true");
+            var indexx = $(this).parent().parent().index();
+            console.log(indexx);
+
+            var addToCartUrl = $('#addToCartUrl').val();
+            console.log(addToCartUrl);
+
+            var pid = $(`#addToCartID${indexx}`).val();
+            $(`#addToCartID`).val(pid);
+
+            console.log(pid);
+
+            var isComingFromSpinningWheel = true;
+
+            // return;
+
+            var form = {
+                pid: pid,
+                isComingFromSpinningWheel: isComingFromSpinningWheel
+
+            };
+           
+            if (addToCartUrl) {
+                $.ajax({
+                    url: addToCartUrl,
+                    method: 'POST',
+                    data: form,
+                    success: function (data) {
+                        console.log(data);
+                        console.log("in sucesss");
+                        
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        console.log("in error");
+                       
+                    }
+                });
+            }
+        });
+    },
+
     shareSpinningWheelPage: function () {
         $(document).on('click', '#shareBtn', function (e) {
             e.preventDefault();
 
             console.log("insidee shareWheelPage");
-            
+
             var shareWheelPageURL = $('#shareWheelPageUrl').val();
             console.log(shareWheelPageURL);
 
             $(document).on('click', '.sharePage', function (e) {
-            var getEmail = $('#emailId').val();
-            var listOfEmails = getEmail;
-            console.log(listOfEmails);
-        
-            $.ajax({
-                url: shareWheelPageURL,
-                type: 'post',
-                data: {listOfEmails},
-                dataType: 'json',
-                context: this,
-                success: function (data) {
-                    console.log("in sucesss of sharePage");
-                    if (data.success) {
-                        console.log("yeahh successs");
-                        console.log(data);
+                var email = $('#emailId').val();
+                console.log(email);
+
+                $.ajax({
+                    url: shareWheelPageURL,
+                    type: 'post',
+                    data: { email },
+                    dataType: 'json',
+                    context: this,
+                    success: function (data) {
+                        console.log("in sucesss of sharePage");
+                        if (data.success) {
+                            $("#emailSuccess").text("Email sent successfully!");
+                            $('#emailId').val('');
+                            console.log("yeahh successs");
+                            console.log(data);
+                            setTimeout(function () {
+                                $('#emailSuccess').fadeOut('fast');
+                            }, 1000);
+
+                        }
+                        else {
+                            $("#emailSuccess").text("Enter a valid email.");
+                        }
+
+                    },
+
+                    error: function (error) {
+                        console.log("Oops in error");
+                        console.log(error);
                     }
-
-                },
-
-                error: function (error) {
-                    console.log("Oops in error");
-                    console.log(error);
-                }
+                });
             });
         });
-    });
 
     }
-    
-
 
 }
+
+

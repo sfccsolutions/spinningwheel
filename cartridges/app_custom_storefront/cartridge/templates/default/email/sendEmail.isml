@@ -8,12 +8,12 @@
     </iscomment>
     <h3>${"Dear Customer!"}</h3>
     <p>${"Here are the shared product details: "}</p>
-    <form action="${pdict.url}" method="get">
-        <input type="hidden" name="pid" value="${pdict.productId}" />
+    <iscomment> <form action="${pdict.url}" method="get">
+        <input type="hidden" name="pid" value="${pdict.productId}" /> </iscomment>
 
         <iscomment> <input type="hidden" name="lineItems" value="${pdict.lineItems}" /> </iscomment>
-        <button type="submit" class="btn btn-save btn-block btn-primary">${"Continue"}</button>
-    </form>
+        <iscomment> <button type="submit" class="btn btn-save btn-block btn-primary">${"Continue"}</button>
+    </form> </iscomment>
 
     <h2>${pdict.productName}
     </h2>

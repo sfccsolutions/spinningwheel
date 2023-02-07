@@ -6,11 +6,24 @@
     </isscript>
 
     <div class="container">
+
         <!-- Trigger the modal with a button -->
         <button type="button" id="shareBtn" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
             <span class="fa fa-share-alt" id="shareIcon" aria-hidden="true"></span>
             Share
         </button>
+        <button type="button" id="walletIcon" class="btn btn-info btn-lg">
+            <span class='fa fa-database' id="coins" title="Points" aria-hidden="true"></span>
+            ${pdict.rewards}
+        </button>
+        <div id="loyaltyPointsIcon">
+         ${pdict.loyalty_points * pdict.rewards}
+        </div>
+        <iscomment> <button type="button" id="loyaltyPointsIcon" class="btn btn-info btn-lg">
+            <span class="badge badge-info" title="loyaltyPoints" ></span>
+            ${pdict.loyalty_points * pdict.rewards}
+        </button>  </iscomment>
+
 
         <!-- Modal -->
         <div class="modal fade" id="myModal" role="dialog">
@@ -27,6 +40,8 @@
                     <div class="modal-body">
 
                         <form>
+                            <div id="emailSuccess" style="color:green;text-align:center;background-color:#cefad0">
+                            </div>
                             <label class="mailLabel">Enter your Email here:</label>
                             <input type="email" name="email" placeholder="Your email ID.."
                                 class="email white form-control" id="emailId"
@@ -54,16 +69,25 @@
         <input type="hidden" id="mySpinerOptions" value="${pdict.spinerOptions}">
         <input type="hidden" id="mySpinerData" value="${pdict.spinerObj}">
         <input type="hidden" id="selectedProduct">
+        <input type="hidden" id="walletUrl" value="${pdict.walletUrl}">
         <input type="hidden" id="shareProductUrl" value="${pdict.shareProductUrl}">
         <input type="hidden" id="shareWheelPageUrl" value="${pdict.shareWheelPageUrl}">
         <input type="hidden" id="addProductUrl" value="${pdict.addProductUrl}">
         <input type="hidden" id="getProductUrl" value="${pdict.getProductUrl}">
         <input type="hidden" id="removeProductUrl" value="${pdict.removeProductUrl}">
+        <input type="hidden" id="enableSpinningWheel" value="${pdict.enable_SpinningWheel}">
+        <input type="hidden" id="updateSpinCountUrl" value="${pdict.updateSpinCountUrl}">
+        <input type="hidden" id="lastSpinDate" value="${pdict.spin_wheel}">
+        <input type="hidden" id="spinWheelDuration" value="${pdict.spinWheelDuration}">
+        <input type="hidden" id="addToCartUrl" value="${pdict.addToCartUrl}">
+
+        
+        
 
 
     </div>
 
-    <div class="row pointsProducts" >
+    <div class="row pointsProducts">
         <div class="col-md-5 box1 text-white" id="chart"></div>
 
         <div class="col-md-7 box2" id="question">
@@ -79,7 +103,7 @@
                             id="btn-decline">Decline</button>
                     </div>
                     <iselse>
-                        <h1>Spin the Wheel and Earn the Points!!</h1>
+                        <h1>Spin the Wheel to Earn the Points!!</h1>
                 </isif>
 
             </div>

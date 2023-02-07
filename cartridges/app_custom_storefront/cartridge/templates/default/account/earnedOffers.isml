@@ -8,7 +8,7 @@
             <iscomment> ${Resource.msg('label.payment', 'account', null)} </iscomment>
             Earned Offers
         </h2>
-        <button type="button" class="btn btn-info btn1 pull-right position-relative" id="btn-accept">
+        <button type="button" class="btn btn-info btn1 pull-right position-relative">
             <a href="${pdict.spinningWheelURL}" style="color:#FFFFFF;">Spin the Wheel</a>
         </button>
         <isif condition="${pdict.payment}">

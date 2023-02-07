@@ -1,8 +1,9 @@
 /* <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> */
 import * as $ from 'jquery'
+import { identity, indexOf } from 'lodash';
 $("#btn-accept").hide();
 $("#btn-decline").hide();
-
+$("#walletIcon").hide();
 //import $ from 'jquery' ;
 var padding = { top: 20, right: 40, bottom: 0, left: 0 },
     w = 400 - padding.left - padding.right,
@@ -50,12 +51,14 @@ var arcs = vis.selectAll("g.slice")
     .attr("title", data[1].productName);
 
 arcs.append("path")
-    .attr("fill", function (d, i) { return color(i); })
+    // .attr("fill", function (d, i) { return color(i); })
+    .attr("fill", "#aec7e8")
     .attr("d", function (d) { return arc(d); })
     .attr("title", data[1].productName);
 
 // add the text
 if (spinOptions === "Points") {
+    $("#walletIcon").show();
     arcs.append("text").attr("transform", function (d) {
         d.innerRadius = 0;
         d.outerRadius = r;
@@ -71,6 +74,7 @@ if (spinOptions === "Points") {
 }
 
 if (spinOptions === "Products") {
+    $("#walletIcon").show();
     arcs.append("image").attr("transform", function (d) {
         d.innerRadius = 0;
         d.outerRadius = r;
@@ -88,70 +92,133 @@ if (spinOptions === "Products") {
 }
 
 container.on("click", spin);
+
 function spin(d) {
-
-    container.on("click", null);
-    //all slices have been seen, all done
-    console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
-    if (oldpick.length == data.length) {
-        console.log("done");
-        container.on("click", null);
-        return;
-    }
-    var ps = 360 / data.length,
-        pieslice = Math.round(1440 / data.length),
-        rng = Math.floor((Math.random() * 1440) + 360);
-
-    rotation = (Math.round(rng / ps) * ps);
-
-    picked = Math.round(data.length - (rotation % 360) / ps);
-    picked = picked >= data.length ? (picked % data.length) : picked;
-    if (oldpick.indexOf(picked) !== -1) {
-        d3.select(this).call(spin);
-        return;
-    } else {
-        oldpick.push(picked);
-    }
-    rotation += 90 - Math.round(ps / 2);
-    vis.transition()
-        .duration(3000)
-        .attrTween("transform", rotTween)
-        .each("end", function () {
-            //mark question as seen
-            d3.select(".slice:nth-child(" + (picked + 1) + ") path")
-            $('#selectedProduct').val(JSON.stringify(data[picked]));
-
-            if (spinOptions === "Products") {
+        updateSpinCount().then(
+            function (value) {
+                console.log(value);
+                console.log("hello");
+                // if (value.error === true) {
+                //     $("#question h1")
+                //         .text("The daily limit has been reached!");
+                //     // return;
+                // }
     
-            // .attr("fill", "#111")
-            //populate question
-            d3.select("#question h1")
-                .text(data[picked].productName)
-            document.getElementById('img').src = data[picked].productImage;
-            d3.select("#question p")
-                .text(data[picked].description)
-
-            console.log("Helloooo");
-
-            /* Get the result value from object "data" */
-            console.log(data[picked].productID)
-
-            /* Comment the below line for restrict spin to sngle time */
-
-                $("#btn-accept").show();
-                $("#btn-decline").show();
-
+                var enable = $('#enableSpinningWheel').val();
+                console.log(enable);
+                // if(enable === "false"){
+                //     $("#question h1")
+                //     .text("No offers are available at the moment.");
+                //     return;
+                // }
+    
+                var spin_wheel_duration = $('#spinWheelDuration').val();
+                console.log(spin_wheel_duration);
+                if (enable === "true" && spin_wheel_duration === "true") {
+                    console.log("Wheel Enabled");
+    
+                    container.on("click", null);
+    
+                    //all slices have been seen, all done
+                    console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
+                    if (oldpick.length == data.length) {
+                        console.log("done");
+                        container.on("click", null);
+                        return;
+                    }
+                    var ps = 360 / data.length,
+                        pieslice = Math.round(1440 / data.length),
+                        rng = Math.floor((Math.random() * 1440) + 360);
+    
+                    rotation = (Math.round(rng / ps) * ps);
+    
+                    picked = Math.round(data.length - (rotation % 360) / ps);
+                    picked = picked >= data.length ? (picked % data.length) : picked;
+                    if (oldpick.indexOf(picked) !== -1) {
+                        d3.select(this).call(spin);
+                        return;
+                    } else {
+                        oldpick.push(picked);
+                    }
+                    rotation += 90 - Math.round(ps / 2);
+                    vis.transition()
+                        .duration(3000)
+                        .attrTween("transform", rotTween)
+                        .each("end", function () {
+                            //mark question as seen
+                            d3.select(".slice:nth-child(" + (picked + 1) + ") path")
+                            $('#selectedProduct').val(JSON.stringify(data[picked]));
+    
+                            if (spinOptions === "Products") {
+    
+                                // .attr("fill", "#111")
+                                //populate question
+                                d3.select("#question h1")
+                                    .text(data[picked].productName)
+                                document.getElementById('img').src = data[picked].productImage;
+                                d3.select("#question p")
+                                    .text(data[picked].description)
+    
+                                console.log("Helloooo");
+    
+                                /* Get the result value from object "data" */
+                                console.log(data[picked].productID)
+    
+                                /* Comment the below line for restrict spin to sngle time */
+    
+                                $("#btn-accept").show();
+                                $("#btn-decline").show();
+    
+                            }
+                            else {
+    
+                                $("#question h1")
+                                    .text("Congratulations!! You have earned " + data[picked] + " Points.")
+    
+                                addSpinnerPoints(data[picked]);
+    
+    
+                            }
+                            oldrotation = rotation;
+                            container.on("click", spin);
+    
+                        });
+                }
+    
+                else {
+                    if (enable === "false" && spin_wheel_duration === "false") {
+                        $("#question h1")
+                            .text("The wheel is not enabled & the daily limit is up!");
+    
+                    }
+                    else if (enable === "false") {
+                        $("#question h1")
+                            .text("No offers are available at the moment.");
+                    }
+    
+                    else {
+                        $("#question h1")
+                            .text("You can spin wheel only 3 times a day.");
+    
+                    }
+    
+    
+                }
+    
+            },
+    
+            function (error) {
+                console.log(error);
+                console.log("in hell");
             }
-            else {
-                
-                $("#question h1")
-                .text("Congratulations!! You have earned " + data[picked] + " Points.")
+        );
+    
 
-            }
-            oldrotation = rotation;
-            container.on("click", spin);
-        });
+
+
 }
+
+
 
 //make arrow
 svg.append("g")
@@ -196,3 +263,82 @@ function getRandomNumbers() {
     }
     return array;
 }
+
+function addSpinnerPoints(points) {
+
+    var walletUrl = $('#walletUrl').val();
+    console.log(walletUrl);
+
+    $.ajax({
+        url: walletUrl,
+        type: 'post',
+        data: { points },
+        dataType: 'json',
+        context: this,
+        success: function (data) {
+            console.log("getting products");
+            console.log(data);
+            if (data.success) {
+                $("#walletIcon")
+                    .html(`<span class='fa fa-database ' id="coins" title="Points" aria-hidden="true"></span>
+                    ${data.rewards}`)
+                $("#loyaltyPointsIcon").html(`${data.earned_dollar}`);
+
+                console.log("inside successs");
+
+
+            }
+
+        },
+
+        error: function (error) {
+            console.log("In error");
+            console.log(error);
+        }
+
+    });
+
+}
+
+async function updateSpinCount() {
+
+    var updateSpinCountUrl = $('#updateSpinCountUrl').val();
+    console.log(updateSpinCountUrl);
+
+    return $.ajax({
+        url: updateSpinCountUrl,
+        type: 'post',
+        dataType: 'json',
+        context: this,
+        // beforeSend: function () {
+        //     this.attr('disabled', true).html("Processing...");
+        //     console.log(this);
+        // },
+        success: function (data) {
+            console.log("updating count");
+            if (data.success) {
+                // this.attr('disabled', false);
+                return true;
+
+            }
+            else {
+                return false;
+            }
+
+        },
+
+        error: function (error) {
+            console.log("In error");
+            console.log(error);
+            return false;
+        }
+    });
+
+}
+
+
+
+
+
+
+

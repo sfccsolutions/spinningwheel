@@ -1,0 +1,82 @@
+{
+    "step-types":
+    {
+      "script-module-step":
+      [
+        {
+          "@type-id":"custom.DeleteUsedHashRecords",
+          "@supports-parallel-execution":"false",
+          "@supports-site-context":"true",
+          "@supports-organization-context":"false",
+          "description":"This script deletes the used hash records of the SpinningWheel_Referral Custom Object. It runs in site scope.",
+          "module":"app_custom_storefront/cartridge/scripts/steps/deleteUsedHashRecords.js",
+          "function":"deleteHashRecords",
+          "transactional":"true",
+          "timeout-in-seconds":"900",
+          "parameters":
+          {
+            "parameter":
+            [
+               
+                
+            ]
+          },
+          "status-codes": 
+          {
+            "status": 
+            [
+                {
+                  "@code": "ERROR",
+                  "description": "Used when the step failed with an error."
+                },
+                {
+                  "@code": "FINISHED",
+                  "description": "Used when the step finished successfully."
+                },
+                {
+                  "@code": "FINISHED_WITH_WARNINGS",
+                  "description": "Used when the step finished with warnings."
+                }
+            ]
+          }
+        },
+        {
+            "@type-id":"custom.ReceiveExpiryEmailAlerts",
+            "@supports-parallel-execution":"false",
+            "@supports-site-context":"true",
+            "@supports-organization-context":"false",
+            "description":"This script sends the product expiry alerts to the customers. It runs in site scope.",
+            "module":"app_custom_storefront/cartridge/scripts/steps/receiveExpiryEmailAlerts.js",
+            "function":"receiveExpiryEmailAlerts",
+            "transactional":"true",
+            "timeout-in-seconds":"900",
+            "parameters":
+            {
+              "parameter":
+              [
+                
+              ]
+            },
+            "status-codes": 
+            {
+              "status": 
+              [
+                  {
+                    "@code": "ERROR",
+                    "description": "Used when the step failed with an error."
+                  },
+                  {
+                    "@code": "FINISHED",
+                    "description": "Used when the step finished successfully."
+                  },
+                  {
+                    "@code": "FINISHED_WITH_WARNINGS",
+                    "description": "Used when the step finished with warnings."
+                  }
+              ]
+            }
+          }
+
+      ]
+    }
+  }

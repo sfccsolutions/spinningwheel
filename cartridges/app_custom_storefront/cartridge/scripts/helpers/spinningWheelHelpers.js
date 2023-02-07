@@ -34,23 +34,18 @@ function getProductsForSpinningWheel() {
         return spinerPoints;
 
     }
-
 }
 
-function validateEmail(recipients) {
-    var emailErrors = [];
+
+
+
+function validateEmail(recipient) {
     var regex = /^[\w.%+-]+@[\w.-]+\.[\w]{2,6}$/;
-    var emails = recipients.split(',');
-    emails.forEach(function (email) {
+    if (!regex.test(recipient)) {
+        return false;
+    }
 
-        if (!regex.test(email)) {
-            emailErrors.push(email);
-
-        }
-
-    });
-
-    return emailErrors;
+    return true;
 
 }
 
@@ -97,37 +92,90 @@ function sendEmail(recipients, url, getProduct, productId) {
     });
 }
 
-function sharePage(recipients, page_url){
+function sharePage(recipient, page_url) {
     var Site = require('dw/system/Site');
+    var share_spinningwheel_page = Site.current.getCustomPreferenceValue('share_WheelPage');
     var emailHelpers = require('*/cartridge/scripts/helpers/emailHelpers');
     var Resource = require('dw/web/Resource');
 
-    var emailObj = {
-        to: null,
-        subject: "Spinning Wheel Page Details",
-        from: Site.current.getCustomPreferenceValue('customerServiceEmail') ||
-            'no-reply@testorganization.com'
-    };
-    var recipientArr = recipients.split(',');
-    var myPageUrl = {page_url};
-    recipientArr.forEach(function (email) {
-        emailObj.to = email;
-        emailHelpers.sendEmail(
-            emailObj,
-            'email/shareWheelPage',
-            myPageUrl
-        );
-    });
-
+    if (share_spinningwheel_page) {
+        var emailObj = {
+            to: null,
+            subject: "Spinning Wheel Page Details",
+            from: Site.current.getCustomPreferenceValue('customerServiceEmail') ||
+                'no-reply@testorganization.com'
+        };
+        var recipientArr = recipient.split(',');
+        var myPageUrl = { page_url };
+        recipientArr.forEach(function (email) {
+            emailObj.to = email;
+            emailHelpers.sendEmail(
+                emailObj,
+                'email/shareWheelPage',
+                myPageUrl
+            );
+        });
+    }
 }
 
 
+function spinWheelDuration(req) {
+    var Calendar = require('dw/util/Calendar');
+    var StringUtils = require('dw/util/StringUtils');
+    var todayDate = StringUtils.formatCalendar(new Calendar(new Date()), "YYYY-MM-dd");
+    var Site = require('dw/system/Site');
+    var max_spin_count = Site.current.getCustomPreferenceValue('max_spin_count');
+    var current_customer = req.currentCustomer.raw.profile.custom;
+    var last_spin_date = req.currentCustomer.raw.profile.custom.last_spin_date;
+    var formatted_last_spin_date = StringUtils.formatCalendar(new Calendar(new Date()), "YYYY-MM-dd");
+    var spin_count = req.currentCustomer.raw.profile.custom.spin_count;
+    var spin_wheel = false;
+    // var now = new Date();
 
+    if (max_spin_count > 0) {
+        if (!('spin_count' in current_customer && 'last_spin_date' in current_customer)) {
+            spin_wheel = true;
+
+        }
+
+        else {
+            if (todayDate === formatted_last_spin_date) {
+                if (spin_count < max_spin_count) {
+                    spin_wheel = true;
+                }
+                else {
+                    spin_wheel = false;
+                }
+
+            }
+            else {
+                // reset the counter and check if the date is changed or not
+                var Transaction = require('dw/system/Transaction');
+                Transaction.wrap(function () {
+                    last_spin_date = req.currentCustomer.raw.profile.custom.last_spin_date;
+                    var spin_count = 0;
+
+                });
+
+            }
+        }
+
+    }
+
+    else {
+        spin_wheel = false;
+
+    }
+
+    return spin_wheel;
+
+}
 
 module.exports = {
     getProductsForSpinningWheel: getProductsForSpinningWheel,
     getProducts: getProducts,
     validateEmail: validateEmail,
     sendEmail: sendEmail,
-    sharePage: sharePage
+    sharePage: sharePage,
+    spinWheelDuration: spinWheelDuration
 }

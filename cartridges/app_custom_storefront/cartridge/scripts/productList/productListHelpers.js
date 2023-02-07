@@ -118,7 +118,7 @@ function addItem(list, pid, config) {
 
             Transaction.wrap(function () {
                 productListItem = list.createProductItem(apiProduct);
-                // var dummy = productListItem;
+                var dummy = productListItem;
                 productListItem.custom.ExpiryDate = ex_date;
                 productListItem.custom.Status = "Available";
 
@@ -139,30 +139,7 @@ function addItem(list, pid, config) {
 }
 
 
-// function itemQuantity(list, pid, config) {
-//     var Transaction = require('dw/system/Transaction');
-//     var itemExist = itemExists(list, pid, config)
-//     if (itemExist && config.type === 100) {
-//         Transaction.wrap(function () {
-//             var quantity = itemExist.setQuantityValue(itemExist.quantityValue + config.qty);
-//         });
-//     }
-
-//     return true;
-// }
-
-// function itemQuantity(list,config){
-//     var Transaction = require('dw/system/Transaction');
-//     var ProductListItem = require('dw/customer/ProductListItem');
-//     Transaction.wrap(function (){
-//         ProductListItem.setQuantityValue(ProductListItem.quantityValue + config.qty)
-//     });
-
-// }
-
-
 function getItem(list) {
-    var ProductList = require('dw/customer/ProductList');
     var Transaction = require('dw/system/Transaction');
     var empty_list = [];
     var now = Date.now();
@@ -177,17 +154,17 @@ function getItem(list) {
                 var product_id = list.items[item].productID;
                 var product_expiry = list.items[item].custom.ExpiryDate.toDateString();
                 var product_status = list.items[item].custom.Status;
+
+
                 if (Date.parse(product_expiry) <= now && product_status === "Available") {
                     product_status = "Expired";
                     list.items[item].custom.Status = "Expired";
-
                 }
 
                 empty_list.push({ product_name, product_expiry, product_status, product_id, product_list_item_id });
 
-
             }
-
+            
         });
 
         return empty_list;
@@ -212,7 +189,7 @@ function removeList(list) {
 
 function removeItem(list, pid) {
     var Transaction = require('dw/system/Transaction');
-    var result = {};
+    // var result = {};
     try {
         var item = list.getItem(pid);
         Transaction.wrap(function () {

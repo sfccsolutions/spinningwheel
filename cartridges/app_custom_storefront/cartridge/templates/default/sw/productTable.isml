@@ -1,6 +1,7 @@
 <isscript>
         var assets = require('*/cartridge/scripts/assets.js');
         assets.addCss('/css/sp/spiningWheel.css')
+        assets.addJs('/js/main1.js');
 </isscript>
 
 
@@ -43,6 +44,8 @@
                                 <a class="action-link add-to-cart w-100 text-center checkAddtoCart">
                                     <span class="fa fa-shopping-cart" aria-hidden="true"></span>
                                     <span class="">ADD TO CART</span>
+                                    <input type="hidden" class="addToCartID" id="addToCartID${loopstate.index}"
+                                        value="${offer.product_id}"/>
                                 </a>
                                 <iscomment> <a class="action-link add-to-cart w-100 text-center checkShare"
                                         title="Share">
@@ -116,5 +119,5 @@
             </tbody>
         </table>
     </div>
-
+      
 </isif>

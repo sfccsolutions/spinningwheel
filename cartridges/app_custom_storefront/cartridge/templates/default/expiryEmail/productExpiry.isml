@@ -1,0 +1,24 @@
+<body>
+    <h3>${"Dear Customer!"}</h3>
+    <h4>Your product will be expired in 2 days!</h4>
+
+    <h3>Place the order at your earliest.</h3>
+    <p>
+        We look forward to keeping you updated with our latest products!
+    </p>
+
+    <p>Stay tuned for emails from our brand.</p>
+
+
+</body>
+
+<iscomment>
+    <h4> Product Name: </h4>
+    ${productName} <br>
+
+    <h4> Product Status: </h4>
+    ${productStatus} <br>
+
+    <h4> Product Expiry: </h4>
+    ${expiryDate} <br>
+</iscomment>
